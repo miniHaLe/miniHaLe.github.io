@@ -1,1 +1,0 @@
-import{g as e}from"./utils-DXD8f_I-.js";import{n as t,t as n}from"./report-configs-CfZZ-_qY.js";var r=e(),i=n.find(e=>e.id===`xuat-kho`);function a(){return(0,r.jsx)(t,{reportId:i.id,title:i.title,filterSchema:i.filterSchema,defaultValues:i.defaultValues,columns:i.columns,queryFn:i.queryFn,exportGroups:i.exportGroups})}export{a as default};

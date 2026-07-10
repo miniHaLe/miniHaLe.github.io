@@ -1,1 +1,0 @@
-import{g as e}from"./index-BaIfgutq.js";function t(t,n){let r=+e(t),[i,a]=[+e(n.start),+e(n.end)].sort((e,t)=>e-t);return r>=i&&r<=a}export{t};
