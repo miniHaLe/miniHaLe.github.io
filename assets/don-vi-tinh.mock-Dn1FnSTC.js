@@ -1,0 +1,1 @@
+import{i as e}from"./mock-error-DZOmb8jg.js";import{t}from"./make-mock-api-B0Y-GneS.js";var n=new e(1017),r=[`Cái`,`Chiếc`,`Bộ`,`Hộp`,`Gói`,`Cuộn`,`Mét`,`Gram`,`Kg`,`Lít`,`Chai`,`Lon`].map((e,t)=>({id:`dvt-${t+1}`,tenDVT:e,active:n.bool(.95),createdAt:n.isoDateWithin(400),updatedAt:n.bool(.15)?n.isoDateWithin(90):void 0})),i=t(r);export{i as n,r as t};
