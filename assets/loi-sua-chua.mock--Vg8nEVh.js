@@ -1,1 +1,0 @@
-import{t as e}from"./make-mock-api-B0Y-GneS.js";import{t}from"./loi-sua-chua-D7xkvAAw.js";var n=e(t.map((e,t)=>({id:`lsc-${t+1}`,branchId:e.branchId,nhomSanPhamId:e.nhomSanPhamId,tenLoi:e.tenLoi,tienCong:e.tienCong,tienCongDV:e.tienCongDV,active:!0,createdAt:new Date(2024,0,t+1).toISOString()})));export{n as t};

@@ -1,27 +1,22 @@
 <!doctype html>
 <html lang="vi">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="robots" content="noindex" />
-    <title>Redirecting...</title>
+    <meta charset="utf-8" />
+    <title>Phong Thành Admin — đã chuyển địa chỉ</title>
+    <meta http-equiv="refresh" content="0; url=https://minihale.github.io/phongthanh-admin/" />
     <script>
-      ;(function () {
-        var path = window.location.pathname
-        var search = window.location.search
-        var hash = window.location.hash
-        var base = ''
-
-        if (window.location.hostname.endsWith('github.io')) {
-          var segments = path.split('/').filter(Boolean)
-          if (segments.length > 0) {
-            base = '/' + segments[0]
-            path = '/' + segments.slice(1).join('/')
-          }
-        }
-
-        window.location.replace(base + '/#' + path + search + hash)
-      })()
+      // Preserve the hash route (e.g. #/danh-muc/model) across the redirect.
+      location.replace(
+        'https://minihale.github.io/phongthanh-admin/' + location.hash,
+      )
     </script>
   </head>
-  <body></body>
+  <body>
+    <p>
+      Trang đã chuyển về
+      <a href="https://minihale.github.io/phongthanh-admin/">
+        minihale.github.io/phongthanh-admin
+      </a>
+    </p>
+  </body>
 </html>

@@ -1,35 +1,22 @@
 <!doctype html>
 <html lang="vi">
   <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="alternate icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Phong Thành — Quản trị sửa chữa &amp; bảo hành</title>
+    <meta charset="utf-8" />
+    <title>Phong Thành Admin — đã chuyển địa chỉ</title>
+    <meta http-equiv="refresh" content="0; url=https://minihale.github.io/phongthanh-admin/" />
     <script>
-      // Apply persisted theme synchronously before hydration to avoid a flash.
-      ;(function () {
-        try {
-          var raw = localStorage.getItem('pt-app')
-          var theme = raw ? JSON.parse(raw)?.state?.theme : null
-          var dark =
-            theme === 'dark' ||
-            ((!theme || theme === 'system') &&
-              window.matchMedia('(prefers-color-scheme: dark)').matches)
-          if (dark) document.documentElement.classList.add('dark')
-        } catch (e) {}
-      })()
+      // Preserve the hash route (e.g. #/danh-muc/model) across the redirect.
+      location.replace(
+        'https://minihale.github.io/phongthanh-admin/' + location.hash,
+      )
     </script>
-    <script type="module" crossorigin src="/assets/index-BYEyZxQv.js"></script>
-    <link rel="modulepreload" crossorigin href="/assets/react-DlU9tEAh.js">
-    <link rel="modulepreload" crossorigin href="/assets/utils-DXD8f_I-.js">
-    <link rel="modulepreload" crossorigin href="/assets/label-OXdz6Lwv.js">
-    <link rel="modulepreload" crossorigin href="/assets/shared-Cgwr9lZP.js">
-    <link rel="modulepreload" crossorigin href="/assets/mock-error-DZOmb8jg.js">
-    <link rel="modulepreload" crossorigin href="/assets/reference-data-CixVshr7.js">
-    <link rel="stylesheet" crossorigin href="/assets/index-JQoFM5dv.css">
   </head>
   <body>
-    <div id="root"></div>
+    <p>
+      Trang đã chuyển về
+      <a href="https://minihale.github.io/phongthanh-admin/">
+        minihale.github.io/phongthanh-admin
+      </a>
+    </p>
   </body>
 </html>

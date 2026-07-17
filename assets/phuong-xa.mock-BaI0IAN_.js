@@ -1,1 +1,0 @@
-import{t as e}from"./make-mock-api-B0Y-GneS.js";import{i as t}from"./tinh-quan-xa-igjTtAPO.js";var n=e(t.map((e,t)=>({id:`px-${t+1}`,tenPhuongXa:e.ten,tinhId:e.tinhId,quanId:e.quanId,khoangCach:e.khoangCach,tienCong:e.tienCong,tuyenId:e.tuyenId,active:!0,createdAt:new Date(2024,0,t+1).toISOString()})));export{n as t};
