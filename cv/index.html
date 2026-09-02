@@ -1089,7 +1089,10 @@ footer{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
       onEnter:function(){ scramble(el); }});
   });
 
-  gsap.utils.toArray('.reveal').forEach(function(el){
+  /* .tl-row is excluded: those rows carry both classes, and two from() tweens on one
+     opacity means the later one re-asserts opacity:0 on every ScrollTrigger refresh,
+     blanking the rows on scroll. Each element gets exactly one entrance. */
+  gsap.utils.toArray('.reveal:not(.tl-row)').forEach(function(el){
     gsap.from(el, {y:24, opacity:0, duration:.8, ease:'power3.out',
       scrollTrigger:{trigger:el, start:'top 88%'}});
   });
@@ -1206,7 +1209,10 @@ footer{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
   });
 
   gsap.utils.toArray('.tl-row').forEach(function(r){
+    /* clearProps hands the row back to the stylesheet once it has arrived, so the
+       inline transform GSAP leaves behind stops overriding .tl-row:hover. */
     gsap.from(r, {x:-30, opacity:0, duration:.75, ease:'power3.out',
+      clearProps:'transform,opacity',
       scrollTrigger:{trigger:r, start:'top 90%'}});
   });
 })();
