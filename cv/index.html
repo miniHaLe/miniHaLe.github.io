@@ -1,0 +1,1246 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,600..800&family=JetBrains+Mono:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,300..600&display=swap">
+<title>Le Nguyen Thanh Ha — AI product engineer</title>
+<meta name="description" content="AI product engineer in Ho Chi Minh City. Computer vision and LLM systems that run in production — retail shelf scoring, restaurant operations, casino floor intelligence. 797 commits across 75 reviewed pull requests, independently verifiable.">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="Le Nguyen Thanh Ha — AI product engineer">
+<meta property="og:description" content="I teach machines to watch, judge, and report. Computer vision and LLM systems that survive a lunch rush, not just a demo.">
+<meta property="og:url" content="https://minihale.github.io/cv/">
+<!-- Absolute so the card resolves when shared from any path.
+     Deployed as a subfolder of the miniHaLe.github.io Pages repo; the root there
+     stays the phongthanh-admin redirect. -->
+<meta property="og:image" content="https://minihale.github.io/cv/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Le Nguyen Thanh Ha — AI product engineer">
+<meta name="twitter:description" content="I teach machines to watch, judge, and report. Computer vision and LLM systems that survive a lunch rush, not just a demo.">
+<meta name="twitter:image" content="https://minihale.github.io/cv/og-image.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230b0d10'/%3E%3Cg fill='none' stroke='%23ff2f43' stroke-width='2.6' stroke-linecap='square'%3E%3Cpath d='M8 12V8h4M20 8h4v4M24 20v4h-4M12 24H8v-4'/%3E%3C/g%3E%3Ccircle cx='16' cy='16' r='2.6' fill='%23f0e9df'/%3E%3C/svg%3E">
+<style>
+/* ══ tokens ══════════════════════════════════════════════════════════════
+   Cold near-black ground lit by one warm aubergine-red bloom, warm cream
+   text (never pure white), a single signal red. Sensor dot-grid + grain. */
+:root{
+  --ground:#0b0d10;
+  --surface:#12161b;
+  --surface-2:#171c23;
+  --line:#242c36;
+  --line-strong:#566981;   /* interactive boundaries: >=3:1 on ground/surface/surface-2 */
+  --bone:#f0e9df;
+  --bone-2:#98a1ac;
+  --muted:#7c8794;
+  --accent:#ff2f43;
+  --on-accent:#0b0d10;
+  --bloom:rgba(255,47,67,.13);
+  --bloom-2:rgba(96,60,140,.12);
+  --dot:rgba(240,233,223,.6);
+  --grid:rgba(240,233,223,.045);
+  --grain:.038;
+  --grain-blend:overlay;
+}
+:root[data-theme="light"]{
+  --ground:#f0ece4; --surface:#fffdf9; --surface-2:#e7e1d5; --line:#aca291;
+  --line-strong:#877f72;
+  --bone:#16171b; --bone-2:#43474f; --muted:#5d6470;
+  --accent:#c30a1c; --on-accent:#fffdf9; --bloom:rgba(176,148,116,.22); --bloom-2:rgba(22,23,27,.05);
+  --dot:rgba(22,23,27,.9); --grid:rgba(22,23,27,.095); --grain:.06;
+  --grain-blend:multiply;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --ground:#f0ece4; --surface:#fffdf9; --surface-2:#e7e1d5; --line:#aca291;
+    --line-strong:#877f72;
+    --bone:#16171b; --bone-2:#43474f; --muted:#5d6470;
+    --accent:#c30a1c; --on-accent:#fffdf9; --bloom:rgba(176,148,116,.22); --bloom-2:rgba(22,23,27,.05);
+    --dot:rgba(22,23,27,.9); --grid:rgba(22,23,27,.095); --grain:.06;
+    --grain-blend:multiply;
+  }
+}
+
+*{box-sizing:border-box}
+/* No global smooth-scroll: across an 8000px document it produced multi-second
+   anchor journeys. Anchor clicks are animated in JS at a fixed duration instead. */
+body{
+  background:var(--ground); color:var(--bone);
+  font-family:"Source Serif 4",Georgia,serif; font-size:17.5px; line-height:1.6;
+  font-optical-sizing:auto; -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  position:relative;
+}
+/* sensor dot-grid: the ground is a pixel lattice, not a void */
+body::before{
+  content:""; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:radial-gradient(var(--grid) 1px, transparent 1px);
+  background-size:22px 22px;
+}
+body::after{
+  content:""; position:fixed; inset:0; z-index:9998; pointer-events:none;
+  opacity:var(--grain); mix-blend-mode:var(--grain-blend);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+main{position:relative; z-index:1}
+
+/* Bricolage at wdth 86 sets 68.3% the advance width of Helvetica (measured), so an
+   unadjusted fallback runs ~46% wider and rewraps the h1 during the display:swap window. */
+@font-face{font-family:"Bricolage fallback"; src:local("Helvetica Neue"),local("Arial");
+  size-adjust:68.3%; ascent-override:130%; descent-override:32%}
+.disp{font-family:"Bricolage Grotesque","Bricolage fallback","Helvetica Neue",Arial,sans-serif;
+  letter-spacing:-.035em; margin:0}
+h1,h2,h3{margin:0; text-wrap:balance}
+.mono{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace}
+a{color:inherit}
+::selection{background:var(--accent); color:var(--on-accent)}
+
+.wrap{max-width:1280px; margin:0 auto; padding:0 30px}
+section[id]{scroll-margin-top:96px}
+section{position:relative}
+
+/* ══ preloader ═══════════════════════════════════════════════════════════
+   Noomo's full-width track, rendered in our own signal red.             */
+#pre{position:fixed; inset:0; z-index:9999; background:var(--ground);
+  display:flex; flex-direction:column; justify-content:center; gap:30px;
+  padding:0 30px}
+#pre.out{animation:preOut .5s cubic-bezier(.76,0,.24,1) forwards}
+@keyframes preOut{to{transform:translateY(-101%); visibility:hidden; pointer-events:none}}
+#pre .row{display:flex; align-items:center; gap:20px}
+#pre .word{font-family:"Bricolage Grotesque",Arial,sans-serif; font-weight:800;
+  font-variation-settings:"wdth" 78; font-size:clamp(30px,5.4vw,62px);
+  letter-spacing:-.04em; line-height:.9; text-transform:uppercase; color:var(--bone)}
+#pre .track{flex:1; height:clamp(34px,5vw,58px); border:1px solid var(--line);
+  border-radius:999px; position:relative}
+#pre .knob{position:absolute; top:50%; left:0; transform:translate(0,-50%);
+  width:clamp(28px,4.2vw,50px); height:clamp(28px,4.2vw,50px); border-radius:50%;
+  background:var(--accent)}
+#pre .pct{font-family:"Bricolage Grotesque",Arial,sans-serif; font-weight:800;
+  font-variation-settings:"wdth" 78; font-size:clamp(30px,5.4vw,62px);
+  letter-spacing:-.04em; color:var(--bone); font-variant-numeric:tabular-nums}
+#pre .foot{font-family:"JetBrains Mono",monospace; font-size:12px;
+  letter-spacing:.18em; text-transform:uppercase; color:var(--muted)}
+
+.skip{position:absolute; left:-9999px; top:0; z-index:9999;
+  background:var(--accent); color:var(--on-accent); padding:14px 20px;
+  font-family:"JetBrains Mono",monospace; font-size:12px; letter-spacing:.12em;
+  text-transform:uppercase; text-decoration:none}
+.skip:focus{left:12px; top:12px}
+
+/* ══ cursor reticle ══════════════════════════════════════════════════════ */
+#cur{position:fixed; top:0; left:0; width:34px; height:34px; z-index:9997;
+  pointer-events:none; opacity:0; transition:opacity .25s ease; mix-blend-mode:difference}
+#cur i{position:absolute; width:11px; height:11px; border:2px solid #fff}
+#cur .c1{top:0;left:0;border-right:0;border-bottom:0}
+#cur .c2{top:0;right:0;border-left:0;border-bottom:0}
+#cur .c3{bottom:0;left:0;border-right:0;border-top:0}
+#cur .c4{bottom:0;right:0;border-left:0;border-top:0}
+#cur b{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  width:3px; height:3px; background:#fff; border-radius:50%}
+@media (pointer:fine){ body.moved #cur{opacity:1} }
+
+/* ══ floating nav island + contact card ══════════════════════════════════ */
+.dock{position:fixed; top:calc(18px + env(safe-area-inset-top)); left:50%; transform:translateX(-50%); z-index:900;
+  display:flex; align-items:center; gap:26px; padding:11px 12px 11px 20px;
+  border:1px solid var(--line-strong); border-radius:999px;
+  background:color-mix(in srgb, var(--surface) 82%, transparent);
+  backdrop-filter:blur(14px); font-family:"JetBrains Mono",monospace;
+  font-size:12px; letter-spacing:.13em; text-transform:uppercase}
+.dock .sig{display:inline-flex; align-items:center; gap:8px; color:var(--bone)}
+.dock .sig .short{display:none}
+/* The dot acquires on arrival, then holds. Permanent peripheral motion in the
+   chrome competes with every heading below it for no informational gain. */
+.dock .sig::before{content:""; width:7px; height:7px; background:var(--accent);
+  border-radius:50%; animation:blip 2.2s ease-in-out 4 both}
+@keyframes blip{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.7)}}
+.dock a{color:var(--bone-2); text-decoration:none; transition:color .2s ease}
+.dock a:hover{color:var(--accent)}
+.dock button{background:var(--surface-2); border:1px solid var(--line-strong);
+  color:var(--bone-2); font:inherit; letter-spacing:.15em; padding:8px 14px;
+  border-radius:999px; cursor:pointer; min-height:44px;
+  transition:border-color .2s ease,color .2s ease}
+.dock button:hover{border-color:var(--accent); color:var(--accent)}
+
+.hail{position:fixed; top:calc(18px + env(safe-area-inset-top));
+  right:max(22px, env(safe-area-inset-right)); z-index:900; display:flex; gap:12px;
+  align-items:center; padding:9px 18px 9px 10px; border:1px solid var(--line-strong);
+  border-radius:999px; background:color-mix(in srgb, var(--surface) 82%, transparent);
+  backdrop-filter:blur(14px); text-decoration:none;
+  font-family:"JetBrains Mono",monospace; font-size:12px; letter-spacing:.13em;
+  text-transform:uppercase; color:var(--bone);
+  transition:border-color .25s ease, transform .25s ease}
+.hail:hover{border-color:var(--accent); transform:translateY(-2px)}
+.hail .txt-short{display:none}
+/* Self-contained on purpose: --on-accent inverts between themes, so inheriting it
+   put near-black on red in one theme and near-white on red in the other, and the
+   mark failed AA in both. Fixed stops + fixed ink: 6.25:1 and 4.65:1. */
+.hail .av{width:30px; height:30px; border-radius:50%; flex:none;
+  background:radial-gradient(circle at 32% 30%, #ff5566, #f0243a 72%);
+  display:grid; place-items:center; font-weight:700; color:#0b0d10; font-size:11px;
+  letter-spacing:.04em}
+@media (max-width:980px){
+  /* Body text was legibly bleeding through the 82% chrome while scrolling. */
+  .dock,.hail{background:color-mix(in srgb, var(--surface) 96%, transparent)}
+  .dock{left:max(14px, env(safe-area-inset-left)); transform:none; gap:12px;
+    padding:5px 6px 5px 14px; letter-spacing:.07em; font-size:11px}
+  /* The wordmark shortens rather than disappearing: on a personal portfolio the
+     name is the payload, and font-size:0 removed it from every phone viewport. */
+  .dock .sig .full{display:none}
+  .dock .sig .short{display:inline}
+  .dock a{display:inline-flex; align-items:center; justify-content:center;
+    min-height:44px; min-width:44px; padding:0 4px}
+  .dock button{min-height:44px; padding:0 12px}
+  .hail .txt{display:none}
+  .hail .txt-short{display:inline}
+  .hail{padding:9px 16px 9px 9px}
+  .hail .av{width:32px; height:32px}
+}
+@media (max-width:400px){
+  .dock{gap:10px; padding-left:11px; font-size:11px}
+}
+
+/* ══ hero ════════════════════════════════════════════════════════════════ */
+.hero{min-height:100svh; display:flex; align-items:center; padding:150px 0 96px;
+  overflow:hidden}
+/* Metalab's volumetric bloom — light with a source, not flat black */
+.hero::before{content:""; position:absolute; z-index:0; pointer-events:none;
+  width:120vw; height:120vh; left:-24vw; top:-34vh;
+  background:radial-gradient(38% 42% at 34% 46%, var(--bloom), transparent 68%),
+             radial-gradient(34% 40% at 74% 30%, var(--bloom-2), transparent 70%)}
+#field{position:absolute; inset:0; width:100%; height:100%; z-index:0}
+.hero .wrap{position:relative; z-index:2; width:100%}
+.hero::after{content:""; position:absolute; inset:auto 0 0 0; height:34%;
+  background:linear-gradient(transparent,var(--ground)); z-index:1; pointer-events:none}
+
+.tagline{font-family:"JetBrains Mono",monospace; font-size:12px;
+  letter-spacing:.18em; text-transform:uppercase; color:var(--accent);
+  margin-bottom:26px}
+h1{font-size:clamp(29px,8.6vw,124px); font-weight:800; line-height:.9;
+  text-transform:uppercase; font-variation-settings:"wdth" 86}
+h1 .ln{display:block; overflow:hidden}
+h1 .ln > span{display:block}
+h1 .hl{color:var(--accent)}
+.thesis{font-size:clamp(18px,2vw,23px); line-height:1.56; max-width:46ch;
+  margin:34px 0 0; color:var(--bone-2)}
+.thesis b{color:var(--bone); font-weight:600}
+.meta-k{color:var(--bone-2)}
+.meta-k::after{content:" \00b7"}
+.scroll-cue{position:absolute; left:30px; bottom:26px; z-index:2;
+  font-family:"JetBrains Mono",monospace; font-size:12px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--muted); display:flex; align-items:center; gap:10px}
+.scroll-cue::before{content:""; width:44px; height:1px; background:var(--muted);
+  animation:sweep 2.4s ease-in-out infinite}
+@keyframes sweep{0%,100%{transform:scaleX(.25);opacity:.4}50%{transform:scaleX(1);opacity:1}}
+.hero .meta{position:absolute; right:30px; bottom:26px; z-index:2; text-align:right;
+  font-family:"JetBrains Mono",monospace; font-size:12px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--muted); line-height:2}
+@media (max-width:860px){
+  .hero{flex-wrap:wrap}
+  .hero .wrap{flex:0 0 100%}
+  .hero .meta{position:static; flex:0 0 100%; order:3; text-align:left;
+    margin:30px 0 0; padding:0 30px; line-height:1.9; right:auto; bottom:auto}
+}
+
+.cta-row{display:flex; gap:12px; flex-wrap:wrap; margin-top:40px}
+.dl-meta{font-family:"JetBrains Mono",monospace; font-size:12px; letter-spacing:.04em;
+  color:var(--muted); margin:16px 0 0}
+.btn{position:relative; display:inline-flex; align-items:center; gap:10px;
+  min-height:52px; padding:0 28px; border-radius:999px;
+  font-family:"JetBrains Mono",monospace; font-size:12px; letter-spacing:.15em;
+  text-transform:uppercase; text-decoration:none; cursor:pointer;
+  border:1px solid var(--accent); color:var(--on-accent); background:var(--accent);
+  overflow:hidden}
+.btn:hover{will-change:transform}
+.btn span{position:relative; z-index:1}
+.btn:hover{background:color-mix(in srgb, var(--accent) 88%, var(--bone));
+  border-color:color-mix(in srgb, var(--accent) 88%, var(--bone))}
+.btn:active{transform:scale(.97)}
+.btn.ghost:active{transform:scale(.97)}
+.dock button:active,.hail:active{transform:scale(.97)}
+.btn.ghost{background:transparent; color:var(--bone); border-color:var(--line-strong)}
+.btn.ghost::before{content:""; position:absolute; inset:0; background:var(--bone);
+  transform:scaleY(0); transform-origin:bottom;
+  transition:transform .36s cubic-bezier(.76,0,.24,1)}
+.btn.ghost:hover::before{transform:scaleY(1)}
+.btn.ghost:hover{color:var(--ground); border-color:var(--bone)}
+.btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.7;
+  position:relative; z-index:1}
+:focus-visible{outline:2px solid var(--accent); outline-offset:3px}
+
+/* ══ marquee ═════════════════════════════════════════════════════════════ */
+.ticker{position:relative; border-block:1px solid var(--line); background:var(--surface);
+  padding:15px 0; overflow:hidden; white-space:nowrap}
+/* WCAG 2.2.2: motion that starts automatically and runs longer than five seconds
+   needs a mechanism to pause it. Hover and focus pause it too. */
+.tick-btn{position:absolute; top:50%; right:0; transform:translateY(-50%); z-index:2;
+  display:inline-flex; align-items:center; justify-content:center; min-height:44px;
+  padding:0 20px 0 26px; border:0; cursor:pointer;
+  font-family:"JetBrains Mono",monospace; font-size:12px; letter-spacing:.13em;
+  text-transform:uppercase; color:var(--muted);
+  background:linear-gradient(90deg, transparent, var(--surface) 22px);
+  transition:color .2s ease}
+.tick-btn:hover{color:var(--accent)}
+.ticker .track{display:inline-flex; gap:44px; padding-right:44px;
+  font-family:"JetBrains Mono",monospace; font-size:12px; letter-spacing:.17em;
+  text-transform:uppercase; color:var(--bone-2); will-change:transform}
+.ticker b{color:var(--accent); font-weight:500}
+
+/* ══ section furniture ═══════════════════════════════════════════════════ */
+.pad{padding:124px 0}
+.eyebrow{font-family:"JetBrains Mono",monospace; font-size:12px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--accent); display:flex; align-items:center;
+  gap:14px; margin-bottom:28px}
+.eyebrow::after{content:""; flex:1; height:1px; background:var(--line)}
+h2{font-size:clamp(23px,5.2vw,74px); font-weight:800; line-height:.94;
+  text-transform:uppercase; font-variation-settings:"wdth" 88}
+h2 .ln{display:block; overflow:hidden}
+h2 .ln > span{display:block}
+h2 .hl{color:var(--accent)}
+.lede{color:var(--bone-2); font-size:19px; max-width:56ch; margin:24px 0 0}
+
+/* ══ capabilities ════════════════════════════════════════════════════════ */
+.cols{display:grid; grid-template-columns:repeat(3,1fr); margin-top:66px}
+.cols article{padding:34px 34px 0; border-left:1px solid var(--line)}
+.cols article:first-child{padding-left:0; border-left:0}
+.cols .idx{font-family:"JetBrains Mono",monospace; font-size:12px;
+  letter-spacing:.16em; color:var(--accent); margin-bottom:18px}
+.cols h3{font-family:"Bricolage Grotesque",Arial,sans-serif;
+  font-size:clamp(20px,2vw,26px); font-weight:700; margin-bottom:14px; line-height:1.05;
+  letter-spacing:-.025em; text-transform:uppercase; font-variation-settings:"wdth" 92}
+.cols p{margin:0; color:var(--bone-2); font-size:16.5px}
+
+/* ══ metrics ═════════════════════════════════════════════════════════════ */
+.stats{display:grid; grid-template-columns:repeat(5,1fr); border-top:1px solid var(--line)}
+.stats div{padding:40px 22px 34px; border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line)}
+.stats div:last-child{border-right:0}
+/* Five equal numbers gave the reader no entry point; the revenue figure leads. */
+.stats div:first-child{background:var(--surface)}
+.stats b{display:block; font-family:"Bricolage Grotesque",Arial,sans-serif;
+  font-weight:800; font-variation-settings:"wdth" 80;
+  font-size:clamp(34px,4.4vw,60px); line-height:.9; letter-spacing:-.045em;
+  color:var(--bone); font-variant-numeric:tabular-nums; white-space:nowrap}
+.stats i{font-style:normal; color:var(--accent)}
+.stats div > span{display:block; font-family:"JetBrains Mono",monospace;
+  font-size:12px; letter-spacing:.13em; text-transform:uppercase;
+  color:var(--muted); margin-top:18px; line-height:1.7}
+
+/* ══ pinned horizontal reel ══════════════════════════════════════════════ */
+/* Only the rail is pinned. Pinning the whole section meant the head's 124px of
+   padding sat inside the pinned box, pushing the card 1320px tall into an 809px
+   viewport: every card lost its outcome figure and its CTA below the fold. */
+#reel{overflow:hidden; padding:36px 0 44px}
+.reel-head{padding:124px 0 40px}
+.rail{display:flex; gap:24px; padding:0 30px}
+.slab{flex:0 0 clamp(300px,33vw,450px); background:var(--surface);
+  border:1px solid var(--line-strong); border-radius:18px; padding:32px 30px 28px;
+  display:flex; flex-direction:column; position:relative; overflow:hidden;
+  transition:border-color .3s ease, background .3s ease}
+.slab:hover,.slab:focus-within{border-color:var(--accent); background:var(--surface-2)}
+.slab .no{position:absolute; top:14px; right:18px;
+  font-family:"JetBrains Mono",monospace; font-size:12px; letter-spacing:.14em;
+  color:var(--muted)}
+.slab .who{font-family:"JetBrains Mono",monospace; font-size:12px;
+  letter-spacing:.13em; text-transform:uppercase; color:var(--accent);
+  margin-bottom:22px}
+.slab h3{font-family:"Bricolage Grotesque",Arial,sans-serif; font-weight:700;
+  font-variation-settings:"wdth" 90; font-size:clamp(22px,2.3vw,30px);
+  line-height:1.02; letter-spacing:-.03em; text-transform:uppercase;
+  margin-bottom:16px}
+.slab p{margin:0; color:var(--bone-2); font-size:16px; flex:1}
+.slab ul{list-style:none; padding:0; margin:24px 0 0; display:flex;
+  flex-wrap:wrap; gap:6px}
+.slab li{font-family:"JetBrains Mono",monospace; font-size:12px; letter-spacing:.04em;
+  color:var(--muted); border:1px solid var(--line); border-radius:999px;
+  padding:5px 11px}
+.slab .out{margin-top:24px; padding-top:18px; border-top:1px solid var(--line);
+  font-family:"JetBrains Mono",monospace; font-size:12px; color:var(--bone-2);
+  display:flex; align-items:baseline; gap:10px}
+
+/* System schematics. These are architecture diagrams drawn from each card's own
+   description - deliberately geometric so none can be mistaken for camera output. */
+.slab .viz{margin:0 0 20px; border:1px solid var(--line); border-radius:10px;
+  background:var(--ground); overflow:hidden; aspect-ratio:320/120}
+.slab .viz svg{display:block; width:100%; height:100%}
+.viz .st{fill:none; stroke:var(--line-strong); stroke-width:1}
+.viz .st.dash{stroke-dasharray:3 4}
+.viz .fill{fill:var(--muted); stroke:none}
+.viz .sig{fill:none; stroke:var(--accent); stroke-width:1.4; stroke-linecap:square}
+.viz .sig-f{fill:var(--accent); stroke:none}
+.viz .sig-s{stroke:var(--accent)}
+.viz .cone{fill:var(--accent); opacity:.07; stroke:none}
+.viz .gw{fill:var(--surface-2); stroke:var(--line-strong); stroke-width:1}
+.viz .nd{fill:none; stroke:var(--line-strong); stroke-width:1}
+.viz .tag{font-family:"JetBrains Mono",monospace; font-size:7.5px; letter-spacing:.12em;
+  fill:var(--muted)}
+.viz .tag.ac{fill:var(--accent)}
+.viz .tag.lb{fill:var(--bone-2)}
+.slab:hover .viz{border-color:var(--line-strong)}
+.slab .go{margin-top:9px; align-self:flex-start; padding:12px 0; min-height:44px;
+  display:inline-flex; align-items:center; gap:6px;
+  font-family:"JetBrains Mono",monospace; font-size:12px; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--bone-2); text-decoration:underline;
+  text-decoration-thickness:1px; text-underline-offset:5px;
+  transition:color .25s ease}
+.slab .go span{display:inline-block; transition:transform .25s ease}
+.slab:hover .go{color:var(--accent)}
+.slab .go:hover span,.slab .go:focus-visible span{transform:translateX(4px)}
+.slab .out strong{font-family:"Bricolage Grotesque",Arial,sans-serif; font-weight:800;
+  font-variation-settings:"wdth" 82; font-size:26px; color:var(--accent);
+  letter-spacing:-.035em; font-variant-numeric:tabular-nums}
+.reel-note{font-family:"JetBrains Mono",monospace; font-size:12px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--muted)}
+.tally{font-family:"JetBrains Mono",monospace; font-size:12px; letter-spacing:.04em;
+  color:var(--bone-2); margin:26px 0 0; max-width:66ch}
+.tally b{color:var(--bone); font-weight:500}
+.access-note{font-size:16px; color:var(--bone-2); max-width:60ch; margin:26px 0 0;
+  padding-top:20px; border-top:1px solid var(--line)}
+.reel-note{margin-top:22px}
+
+/* ══ principles ══════════════════════════════════════════════════════════ */
+.split{display:grid; grid-template-columns:.9fr 1.1fr; gap:60px; align-items:start}
+.sticky{position:sticky; top:130px}
+.plist{border-top:1px solid var(--line)}
+.plist > div{padding:30px 0; border-bottom:1px solid var(--line); display:grid;
+  grid-template-columns:38px 1fr; gap:22px; align-items:start}
+.plist .k{font-family:"JetBrains Mono",monospace; font-size:12px;
+  color:var(--accent); padding-top:6px}
+.plist h3{font-family:"Bricolage Grotesque",Arial,sans-serif; font-weight:700;
+  font-variation-settings:"wdth" 92; font-size:19px; text-transform:uppercase;
+  letter-spacing:-.02em; margin-bottom:9px}
+.plist p{margin:0; color:var(--bone-2); font-size:16.5px}
+/* A governs the other five and the card schematics already illustrate it, so it
+   leads rather than sitting as the first of six identical rows. */
+.plist > div:first-child{padding-top:34px}
+.plist > div:first-child h3{font-size:23px}
+.plist > div:first-child p{color:var(--bone); font-size:17.5px}
+.plist > div:first-child .k{color:var(--accent); font-weight:700}
+
+/* ══ timeline ════════════════════════════════════════════════════════════ */
+.tl{border-top:1px solid var(--line); margin-top:56px}
+.tl-row{display:grid; grid-template-columns:200px 1fr; gap:34px; padding:32px 0;
+  border-bottom:1px solid var(--line); transition:transform .35s ease}
+.tl-row:hover{transform:translateX(16px)}
+.tl-row .when{font-family:"JetBrains Mono",monospace; font-size:12px;
+  letter-spacing:.13em; text-transform:uppercase; color:var(--muted); padding-top:6px}
+.tl-row h3{font-family:"Bricolage Grotesque",Arial,sans-serif; font-weight:700;
+  font-variation-settings:"wdth" 92; font-size:22px; text-transform:uppercase;
+  letter-spacing:-.025em}
+.tl-row p{margin:9px 0 0; color:var(--bone-2); font-size:16.5px; max-width:62ch}
+
+/* ══ close ═══════════════════════════════════════════════════════════════ */
+.close{padding:130px 0 80px; border-top:1px solid var(--line); position:relative;
+  overflow:hidden}
+.close::before{content:""; position:absolute; z-index:0; pointer-events:none;
+  inset:-40% -20% auto -20%; height:150%;
+  background:radial-gradient(40% 50% at 50% 60%, var(--bloom), transparent 70%)}
+.close .wrap{position:relative; z-index:1}
+.close h2{max-width:none}  /* .ln spans author the breaks */
+/* Six equal-weight options sat at the conversion moment. Two buttons now lead and
+   the direct channels sit under a label as reference, not as competing choices. */
+.links-label{font-family:"JetBrains Mono",monospace; font-size:12px;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--muted);
+  margin:46px 0 0; padding-top:22px; border-top:1px solid var(--line)}
+.close .links{display:flex; flex-wrap:wrap; gap:14px 40px; margin-top:18px;
+  font-family:"JetBrains Mono",monospace; font-size:12.5px; color:var(--bone-2)}
+.close .links a{text-decoration:none; border-bottom:1px solid var(--line-strong);
+  padding-bottom:4px; transition:color .2s ease, border-color .2s ease}
+.close .links a:hover{color:var(--accent); border-color:var(--accent)}
+footer{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
+  padding:28px 0 60px; font-family:"JetBrains Mono",monospace; font-size:12px;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
+
+/* ══ responsive ══════════════════════════════════════════════════════════ */
+@media (max-width:1000px){
+  .cols{grid-template-columns:1fr}
+  .cols article{padding:26px 0; border-left:0; border-top:1px solid var(--line)}
+  .cols article:first-child{border-top:0; padding-top:0}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .stats div:nth-child(2n){border-right:0}
+  .split{grid-template-columns:1fr; gap:34px}
+  .sticky{position:static}
+  .slab{flex:1 1 100%}
+  .tl-row{grid-template-columns:1fr; gap:8px}
+  .pad{padding:80px 0}
+  .reel-head{padding:80px 0 34px}
+  .hero{padding:118px 0 84px}
+}
+
+/* The pin is gated on height as well as width, so a short laptop or a zoomed
+   window gets the wrapped grid rather than a clipped pinned card. The JS
+   matchMedia keys below mirror these two queries exactly. */
+@media (max-width:1000px), (max-height:759px){
+  .rail{flex-wrap:wrap; padding-inline:0}
+  .reel-note{display:none}
+  #reel{padding:0}
+}
+@media (min-width:1001px) and (max-height:759px){
+  /* 0 1 not 1 1: a card alone on the last row must keep its width rather than
+     stretching across and reading as a different component. */
+  .slab{flex:0 1 clamp(300px,30vw,420px)}
+}
+@media (max-width:560px){
+  .wrap{padding:0 22px}
+  .rail{gap:18px}
+  .hero{padding:106px 0 76px}
+  .scroll-cue{left:22px}
+  .hero .meta{padding:0 22px}
+  .close .links{gap:6px 28px}
+  .close .links a{display:inline-block; padding:13px 0}
+}
+@media (prefers-reduced-motion:reduce){
+  /* Suppress movement, not feedback: colour and border transitions are how
+     hover and focus are communicated, so they keep a (short) duration. */
+  *{animation-duration:.001ms!important; animation-iteration-count:1!important;
+    transition-property:color, background-color, border-color, outline-color!important;
+    transition-duration:.12s!important}
+  .btn:active,.btn.ghost:active,.dock button:active,.hail:active{transform:none}
+  html{scroll-behavior:auto}
+  #pre{display:none}
+  h1 .ln > span, h2 .ln > span{transform:none!important}
+}
+</style>
+
+<div id="pre" aria-hidden="true">
+  <div class="row">
+    <span class="word">Loading type</span>
+    <span class="track"><span class="knob" id="preKnob"></span></span>
+    <span class="pct" id="preNum">0%</span>
+  </div>
+  <div class="foot">Le Nguyen Thanh Ha &mdash; AI product engineer &mdash; Ho Chi Minh City</div>
+</div>
+
+<a class="skip" href="#main">Skip to content</a>
+<div id="cur" aria-hidden="true"><i class="c1"></i><i class="c2"></i><i class="c3"></i><i class="c4"></i><b></b></div>
+
+<nav class="dock">
+  <span class="sig"><span class="full">LNT&nbsp;HA</span><span class="short">HA</span></span>
+  <a href="#work">Work</a>
+  <a href="#method">Method</a>
+  <a href="#contact">Contact</a>
+  <button id="themeBtn" type="button" aria-label="Switch to light theme">Theme</button>
+</nav>
+<a class="hail" href="mailto:thanhha.le@outlook.com"
+   aria-label="Get in touch by email">
+  <span class="av" aria-hidden="true">HA</span><span class="txt">Get in touch</span><span class="txt-short">Email</span>
+</a>
+
+<main id="main" tabindex="-1">
+<section class="hero">
+  <canvas id="field" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <p class="tagline" data-scramble>[ LE NGUYEN THANH HA &mdash; AI PRODUCT ENGINEER ]</p>
+    <h1 class="disp">
+      <span class="ln"><span>I teach machines</span></span>
+      <span class="ln"><span>to <span class="hl">watch, judge,</span></span></span>
+      <span class="ln"><span>and report.</span></span>
+    </h1>
+    <p class="thesis">Point a camera at a real business problem and I turn it into software that
+      <b>earns its cost back</b> &mdash; the model, the backend, the infrastructure, and the screen
+      a manager actually opens.</p>
+    <div class="cta-row">
+      <a class="btn mag" href="#work"><span>See the work</span></a>
+      <a class="btn ghost mag dl" data-cv href="Ha.LeNguyenThanh_CV_Vingroup.pdf"
+         type="application/pdf" download>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4.5-4.5M12 15l-4.5-4.5M4 20h16"/></svg>
+        <span>Download CV</span></a>
+    </div>
+    <p class="dl-meta">PDF &middot; 240&nbsp;KB &middot; updated September 2026</p>
+  </div>
+  <div class="scroll-cue">Scroll</div>
+  <div class="meta">
+    <div><span class="meta-k">Local time</span> <span id="clock">--:--:-- ICT</span></div>
+    <div><span class="meta-k">Based</span> 10.82&deg;N 106.63&deg;E &middot; Ho Chi Minh City</div>
+    <div><span class="meta-k">Status</span> Open to relocation</div>
+  </div>
+</section>
+
+<div class="ticker">
+  <div class="track" id="tickA" aria-hidden="true"></div>
+  <button class="tick-btn mono" id="tickBtn" type="button">Pause</button>
+</div>
+
+<section class="pad">
+  <div class="wrap">
+    <p class="eyebrow" data-scramble>[ WHAT I ACTUALLY DO ]</p>
+    <h2 class="disp"><span class="ln"><span>Most AI work stops</span></span>
+        <span class="ln"><span>at the demo. Mine</span></span>
+        <span class="ln"><span>survives a <span class="hl">lunch rush.</span></span></span></h2>
+    <div class="cols">
+      <article class="reveal">
+        <div class="idx">01 &mdash; SEE</div>
+        <h3>Vision that holds<br>up in a real room</h3>
+        <p>Detection, tracking and re-identification under bad angles, fisheye distortion and people
+           who walk behind each other. 95% mAP at 25 FPS on one GPU, not a benchmark rig.</p>
+      </article>
+      <article class="reveal">
+        <div class="idx">02 &mdash; JUDGE</div>
+        <h3>Models that make<br>a defensible call</h3>
+        <p>Vision-language models and LLM agents that score a dish, flag a shelf, or answer a
+           manager's question in plain language, with guardrails, so the answer can be argued
+           with rather than merely trusted.</p>
+      </article>
+      <article class="reveal">
+        <div class="idx">03 &mdash; SHIP</div>
+        <h3>The unglamorous<br>half of the job</h3>
+        <p>Microservices, auth, role-based access, CI/CD with rollback, four-language interfaces,
+           and documentation the client can run without me in the room.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="stats">
+      <div class="reveal"><b><i>$</i><span class="count" data-to="500">500</span><i>K</i></b>
+        <span>Annual revenue<br>product shipped</span></div>
+      <div class="reveal"><b><span class="count" data-to="3">3</span><i>&times;</i></b>
+        <span>Throughput on the<br>same GPU spend</span></div>
+      <div class="reveal"><b><span class="count" data-to="101">101</span></b>
+        <span>Security findings<br>found and closed</span></div>
+      <div class="reveal"><b><span class="count" data-to="797">797</span></b>
+        <span>Commits across<br>75 reviewed PRs</span></div>
+      <div class="reveal"><b><span class="count" data-to="6">6</span></b>
+        <span>Client systems<br>delivered solo</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="wrap reel-head">
+    <p class="eyebrow" data-scramble>[ SELECTED WORK &mdash; FIELD LOG ]</p>
+    <h2 class="disp"><span class="ln"><span>Twelve systems in</span></span>
+        <span class="ln"><span>production. <span class="hl">Here</span></span></span>
+        <span class="ln"><span><span class="hl">are seven.</span></span></span></h2>
+    <p class="tally reveal"><b>Across all twelve:</b> four at DFlo &middot; six delivered solo &middot;
+       one at Rainscales &middot; one at Viettel Solutions.</p>
+    <p class="tally reveal"><b>The seven below:</b> one each at Viettel Solutions, DFlo,
+       Golden Gate Group, Rainscales and open source, plus two delivered independently.</p>
+    <p class="access-note reveal">&ldquo;Request repository access&rdquo; opens an email. I reply
+       within two business days; read access is granted under a mutual NDA.</p>
+    <p class="reel-note reveal">Scroll &mdash; the reel advances</p>
+  </div>
+  <div id="reel">
+    <div class="rail" id="rail">
+      <article class="slab">
+        <div class="no">01/07</div>
+        <div class="who">Viettel Solutions &middot; 2023&ndash;25</div>
+        <figure class="viz"><svg viewBox="0 0 320 120" role="img" aria-label="Schematic: three shelf rows of product facings, one facing bracketed and scored by the vision model"><g class="st"><line x1="18" y1="26" x2="302" y2="26"/><line x1="18" y1="60" x2="302" y2="60"/><line x1="18" y1="94" x2="302" y2="94"/></g><g class="fill"><rect x="24" y="4" width="10" height="22" rx="1"/><rect x="50" y="10" width="10" height="16" rx="1"/><rect x="70" y="0" width="12" height="26" rx="1"/><rect x="100" y="8" width="10" height="18" rx="1"/><rect x="124" y="4" width="12" height="22" rx="1"/><rect x="152" y="12" width="10" height="14" rx="1"/><rect x="172" y="-4" width="12" height="30" rx="1"/><rect x="208" y="6" width="10" height="20" rx="1"/><rect x="234" y="8" width="12" height="18" rx="1"/><rect x="258" y="0" width="10" height="26" rx="1"/></g><g class="fill"><rect x="24" y="34" width="12" height="26" rx="1"/><rect x="54" y="42" width="10" height="18" rx="1"/><rect x="78" y="30" width="12" height="30" rx="1"/><rect x="112" y="40" width="10" height="20" rx="1"/><rect x="138" y="36" width="12" height="24" rx="1"/><rect x="168" y="44" width="10" height="16" rx="1"/><rect x="190" y="32" width="12" height="28" rx="1"/><rect x="224" y="38" width="10" height="22" rx="1"/><rect x="250" y="42" width="12" height="18" rx="1"/><rect x="274" y="34" width="10" height="26" rx="1"/></g><g class="fill"><rect x="24" y="74" width="10" height="20" rx="1"/><rect x="48" y="66" width="12" height="28" rx="1"/><rect x="80" y="78" width="10" height="16" rx="1"/><rect x="102" y="70" width="12" height="24" rx="1"/><rect x="132" y="64" width="10" height="30" rx="1"/><rect x="156" y="76" width="12" height="18" rx="1"/><rect x="186" y="72" width="10" height="22" rx="1"/><rect x="210" y="68" width="12" height="26" rx="1"/><rect x="242" y="76" width="10" height="18" rx="1"/><rect x="266" y="70" width="12" height="24" rx="1"/></g><g class="sig"><path class="bk" d="M132 71V64h7M157 64h7v7M164 87v7h-7M139 94h-7v-7"/></g><text class="tag ac" x="132" y="112">FACING 0.94</text></svg></figure>
+        <h3>TesselAI &mdash; retail shelf scoring</h3>
+        <p>I found the opportunity, wrote the business case, then built and released it: computer
+           vision that scores market photographs automatically and retires manual field-audit review.</p>
+        <ul><li>YOLO</li><li>Segmentation</li><li>Triton</li><li>ONNX</li></ul>
+        <div class="out"><strong>$500K</strong> annual revenue &middot; 120 RPS at TP95</div>
+        <a class="go" href="mailto:thanhha.le@outlook.com?subject=Repository%20access%20%E2%80%94%20TesselAI" aria-label="Request repository access for TesselAI, retail shelf scoring">Request repository access <span aria-hidden="true">&rarr;</span></a>
+      </article>
+      <article class="slab">
+        <div class="no">02/07</div>
+        <div class="who">DFlo &middot; 2025&ndash;present</div>
+        <figure class="viz"><svg viewBox="0 0 320 120" role="img" aria-label="Schematic: six services behind a single API gateway"><g class="st"><path d="M96 60 C 130 60, 140 30, 176 30"/><path d="M96 60 C 130 60, 140 50, 176 50"/><path d="M96 60 C 130 60, 140 70, 176 70"/><path d="M96 60 C 130 60, 140 90, 176 90"/><path d="M96 60 C 130 60, 140 18, 176 18"/><path d="M96 60 C 130 60, 140 110, 176 110"/></g><rect class="gw" x="26" y="42" width="70" height="36" rx="4"/><text class="tag lb" x="61" y="64">GATEWAY</text><rect class="nd" x="176" y="22" width="118" height="16" rx="3"/><text class="tag" x="184" y="33.5">VISION</text><rect class="nd" x="176" y="42" width="118" height="16" rx="3"/><text class="tag" x="184" y="53.5">QC</text><rect class="nd" x="176" y="62" width="118" height="16" rx="3"/><text class="tag" x="184" y="73.5">AGENT</text><rect class="nd" x="176" y="82" width="118" height="16" rx="3"/><text class="tag" x="184" y="93.5">DASH</text><rect class="nd" x="176" y="102" width="118" height="16" rx="3"/><text class="tag" x="184" y="113.5">DATA</text><rect class="nd" x="176" y="2" width="118" height="16" rx="3"/><text class="tag" x="184" y="13.5">AUTH</text></svg></figure>
+        <h3>Sauron &mdash; restaurant operations AI</h3>
+        <p>Six services behind one gateway: live table occupancy, movement heatmaps, automated food
+           quality control, and a chat agent answering operations questions from history. Primary author.</p>
+        <ul><li>FastAPI</li><li>YOLO11 + ReID</li><li>Gemini VLM</li><li>Agno</li><li>Next.js</li></ul>
+        <div class="out"><strong>399</strong> commits &middot; EN / VI / JA / ZH at launch</div>
+        <a class="go" href="mailto:thanhha.le@outlook.com?subject=Repository%20access%20%E2%80%94%20Sauron" aria-label="Request repository access for Sauron, restaurant operations AI">Request repository access <span aria-hidden="true">&rarr;</span></a>
+      </article>
+      <article class="slab">
+        <div class="no">03/07</div>
+        <div class="who">Golden Gate Group &middot; 2025</div>
+        <figure class="viz"><svg viewBox="0 0 320 120" role="img" aria-label="Schematic: dishes counted by category as they travel a conveyor belt past two cameras"><g class="cone"><path d="M70 8 L38 62 L102 62 Z"/><path d="M222 8 L190 62 L254 62 Z"/></g><g class="st"><line x1="8" y1="72" x2="312" y2="72"/><line x1="8" y1="96" x2="312" y2="96"/></g><g class="st dash"><line x1="8" y1="84" x2="312" y2="84"/></g><circle class="fill" cx="36" cy="84" r="7"/><circle class="fill" cx="74" cy="84" r="7"/><circle class="fill" cx="112" cy="84" r="7"/><circle class="sig-f" cx="150" cy="84" r="7"/><circle class="fill" cx="188" cy="84" r="7"/><circle class="fill" cx="226" cy="84" r="7"/><circle class="fill" cx="264" cy="84" r="7"/><g class="sig"><path class="bk" d="M140 75V68h7M165 68h7v7M172 93v7h-7M147 100h-7v-7"/></g><text class="tag" x="8" y="116">BELT 03</text><text class="tag ac" x="264" y="116">COUNT 13</text></svg></figure>
+        <h3>KichiKichi belt counting</h3>
+        <p>Every dish counted by category as it travels the belt, across two cameras, with belt-number
+           OCR and a live dashboard for store managers. Cut the API surface from 30+ endpoints to 13.</p>
+        <ul><li>Multi-camera</li><li>OCR</li><li>Socket.IO</li><li>GPU tuning</li></ul>
+        <div class="out"><strong>Live</strong> in a national restaurant chain</div>
+        <a class="go" href="mailto:thanhha.le@outlook.com?subject=Repository%20access%20%E2%80%94%20KichiKichi%20belt%20counting" aria-label="Request repository access for KichiKichi belt counting">Request repository access <span aria-hidden="true">&rarr;</span></a>
+      </article>
+      <article class="slab">
+        <div class="no">04/07</div>
+        <div class="who">Independent &middot; 2026</div>
+        <figure class="viz"><svg viewBox="0 0 320 120" role="img" aria-label="Schematic: inconsistent workbooks reconciled into one table, held at a human confirmation gate"><g class="st"><rect x="14" y="22" width="72" height="54" rx="3"/><rect x="20" y="28" width="72" height="54" rx="3"/><rect x="26" y="34" width="72" height="54" rx="3"/></g><g class="st dash"><line x1="104" y1="60" x2="150" y2="60"/></g><g class="sig"><line x1="160" y1="18" x2="160" y2="102" stroke-dasharray="4 5"/></g><text class="tag ac" x="150" y="112">HUMAN CONFIRMS</text><rect class="st" x="186" y="26" width="112" height="60" rx="3"/><g class="st"><line x1="186" y1="40" x2="298" y2="40"/><line x1="186" y1="54" x2="298" y2="54"/><line x1="186" y1="68" x2="298" y2="68"/><line x1="222" y1="26" x2="222" y2="86"/><line x1="260" y1="26" x2="260" y2="86"/></g></svg></figure>
+        <h3>Financial analytics platform</h3>
+        <p>Messy client workbooks reconciled into structured tables. The system proposes how files
+           relate, then waits for a human to confirm before anything counts as fact.</p>
+        <ul><li>FastAPI</li><li>Celery</li><li>Next.js 15</li><li>On-prem</li></ul>
+        <div class="out"><strong>101</strong> security findings closed, 3 releases</div>
+        <a class="go" href="mailto:thanhha.le@outlook.com?subject=Repository%20access%20%E2%80%94%20Financial%20analytics%20platform" aria-label="Request repository access for the financial analytics platform">Request repository access <span aria-hidden="true">&rarr;</span></a>
+      </article>
+      <article class="slab">
+        <div class="no">05/07</div>
+        <div class="who">Independent &middot; 2026</div>
+        <figure class="viz"><svg viewBox="0 0 320 120" role="img" aria-label="Schematic: branch-level data separation enforced inside the access token"><rect class="gw" x="16" y="44" width="86" height="32" rx="16"/><text class="tag lb" x="42" y="64">TOKEN</text><g class="sig"><circle cx="30" cy="60" r="5"/></g><g class="st"><path d="M102 60 C 134 60, 142 24, 174 24"/><path d="M102 60 C 134 60, 142 60, 174 60"/><path d="M102 60 C 134 60, 142 96, 174 96"/></g><rect class="nd" x="174" y="11" width="124" height="26" rx="3"/><text class="tag" x="184" y="27.5">BRANCH 1</text><rect class="nd sig-s" x="174" y="47" width="124" height="26" rx="3"/><text class="tag" x="184" y="63.5">BRANCH 2</text><rect class="nd" x="174" y="83" width="124" height="26" rx="3"/><text class="tag" x="184" y="99.5">BRANCH 3</text><g class="st dash"><line x1="160" y1="8" x2="160" y2="112"/></g></svg></figure>
+        <h3>Multi-branch operations platform</h3>
+        <p>Spreadsheets replaced by one system across an appliance-repair chain. Branch-level data
+           separation is enforced inside the access token itself, not by hiding a menu.</p>
+        <ul><li>NestJS</li><li>PostgreSQL</li><li>Drizzle</li><li>React</li></ul>
+        <div class="out"><strong>21</strong> business resources live</div>
+        <a class="go" href="mailto:thanhha.le@outlook.com?subject=Repository%20access%20%E2%80%94%20Multi-branch%20operations%20platform" aria-label="Request repository access for the multi-branch operations platform">Request repository access <span aria-hidden="true">&rarr;</span></a>
+      </article>
+      <article class="slab">
+        <div class="no">06/07</div>
+        <div class="who">Rainscales &middot; 2025</div>
+        <figure class="viz"><svg viewBox="0 0 320 120" role="img" aria-label="Schematic: fisheye camera coverage of a floor, with a raised-hand gesture detected"><g class="st dash"><path d="M160 6 m-44 0 a44 30 0 0 0 88 0"/><path d="M160 6 m-88 0 a88 60 0 0 0 176 0"/><path d="M160 6 m-132 0 a132 90 0 0 0 264 0"/></g><circle class="sig-f" cx="160" cy="6" r="4"/><g class="st"><line x1="16" y1="96" x2="16" y2="104"/><line x1="64" y1="96" x2="64" y2="104"/><line x1="112" y1="96" x2="112" y2="104"/><line x1="160" y1="96" x2="160" y2="104"/><line x1="208" y1="96" x2="208" y2="104"/><line x1="256" y1="96" x2="256" y2="104"/><line x1="304" y1="96" x2="304" y2="104"/><line x1="16" y1="100" x2="304" y2="100"/></g><g class="fill"><circle cx="64" cy="62" r="4.5"/><path class="st" d="M64 67v11M58 74h12"/></g><g class="fill"><circle cx="112" cy="70" r="4.5"/><path class="st" d="M112 75v11M106 82h12"/></g><g class="fill"><circle cx="214" cy="64" r="4.5"/><path class="st" d="M214 69v11M208 76h12"/></g><g class="fill"><circle cx="262" cy="74" r="4.5"/><path class="st" d="M262 79v11M256 86h12"/></g><g class="sig"><circle cx="160" cy="66" r="4.5"/><path d="M160 71v11M154 78h12M160 71l7-9"/><path class="bk" d="M146 63V56h7M167 56h7v7M174 83v7h-7M153 90h-7v-7"/></g><text class="tag ac" x="146" y="114">HAND RAISED</text></svg></figure>
+        <h3>Casino floor intelligence</h3>
+        <p>Customer and staff detection under camera placements that had defeated earlier attempts,
+           plus gesture recognition so floor staff are sent to guests raising a hand.</p>
+        <ul><li>YOLOv11 / YOLOX</li><li>Fisheye calibration</li><li>Multi-camera</li></ul>
+        <div class="out"><strong>95%</strong> mAP at ~25 FPS on one GPU</div>
+        <a class="go" href="mailto:thanhha.le@outlook.com?subject=Repository%20access%20%E2%80%94%20Casino%20floor%20intelligence" aria-label="Request repository access for casino floor intelligence">Request repository access <span aria-hidden="true">&rarr;</span></a>
+      </article>
+      <article class="slab">
+        <div class="no">07/07</div>
+        <div class="who">Open source</div>
+        <figure class="viz"><svg viewBox="0 0 320 120" role="img" aria-label="Schematic: image-to-image translation across a multi-GPU training pipeline"><g class="st"><rect x="14" y="24" width="96" height="72" rx="3"/></g><g class="fill"><rect x="18" y="28" width="12" height="12" rx="1" opacity="0.25"/><rect x="34" y="28" width="12" height="12" rx="1" opacity="0.3214285714285714"/><rect x="50" y="28" width="12" height="12" rx="1" opacity="0.39285714285714285"/><rect x="66" y="28" width="12" height="12" rx="1" opacity="0.4642857142857143"/><rect x="82" y="28" width="12" height="12" rx="1" opacity="0.5357142857142857"/><rect x="98" y="28" width="12" height="12" rx="1" opacity="0.6071428571428572"/><rect x="18" y="44" width="12" height="12" rx="1" opacity="0.6785714285714286"/><rect x="34" y="44" width="12" height="12" rx="1" opacity="0.75"/><rect x="50" y="44" width="12" height="12" rx="1" opacity="0.8214285714285714"/><rect x="66" y="44" width="12" height="12" rx="1" opacity="0.25"/><rect x="82" y="44" width="12" height="12" rx="1" opacity="0.3214285714285714"/><rect x="98" y="44" width="12" height="12" rx="1" opacity="0.39285714285714285"/><rect x="18" y="60" width="12" height="12" rx="1" opacity="0.4642857142857143"/><rect x="34" y="60" width="12" height="12" rx="1" opacity="0.5357142857142857"/><rect x="50" y="60" width="12" height="12" rx="1" opacity="0.6071428571428572"/><rect x="66" y="60" width="12" height="12" rx="1" opacity="0.6785714285714286"/><rect x="82" y="60" width="12" height="12" rx="1" opacity="0.75"/><rect x="98" y="60" width="12" height="12" rx="1" opacity="0.8214285714285714"/><rect x="18" y="76" width="12" height="12" rx="1" opacity="0.25"/><rect x="34" y="76" width="12" height="12" rx="1" opacity="0.3214285714285714"/><rect x="50" y="76" width="12" height="12" rx="1" opacity="0.39285714285714285"/><rect x="66" y="76" width="12" height="12" rx="1" opacity="0.4642857142857143"/><rect x="82" y="76" width="12" height="12" rx="1" opacity="0.5357142857142857"/><rect x="98" y="76" width="12" height="12" rx="1" opacity="0.6071428571428572"/></g><g class="st dash"><line x1="118" y1="60" x2="200" y2="60"/></g><text class="tag ac" x="128" y="52">G / D</text><g class="sig"><path class="bk" d="M202 29V22h7M299 22h7v7M306 91v7h-7M209 98h-7v-7"/></g><g class="st"><rect x="210" y="24" width="96" height="72" rx="3"/></g><g class="sig-f"><rect x="214" y="28" width="12" height="12" rx="1" opacity="0.18"/><rect x="230" y="28" width="12" height="12" rx="1" opacity="0.7424999999999999"/><rect x="246" y="28" width="12" height="12" rx="1" opacity="0.6174999999999999"/><rect x="262" y="28" width="12" height="12" rx="1" opacity="0.4925"/><rect x="278" y="28" width="12" height="12" rx="1" opacity="0.3675"/><rect x="294" y="28" width="12" height="12" rx="1" opacity="0.2425"/><rect x="214" y="44" width="12" height="12" rx="1" opacity="0.8049999999999999"/><rect x="230" y="44" width="12" height="12" rx="1" opacity="0.6799999999999999"/><rect x="246" y="44" width="12" height="12" rx="1" opacity="0.5549999999999999"/><rect x="262" y="44" width="12" height="12" rx="1" opacity="0.43"/><rect x="278" y="44" width="12" height="12" rx="1" opacity="0.305"/><rect x="294" y="44" width="12" height="12" rx="1" opacity="0.18"/><rect x="214" y="60" width="12" height="12" rx="1" opacity="0.7424999999999999"/><rect x="230" y="60" width="12" height="12" rx="1" opacity="0.6174999999999999"/><rect x="246" y="60" width="12" height="12" rx="1" opacity="0.4925"/><rect x="262" y="60" width="12" height="12" rx="1" opacity="0.3675"/><rect x="278" y="60" width="12" height="12" rx="1" opacity="0.2425"/><rect x="294" y="60" width="12" height="12" rx="1" opacity="0.8049999999999999"/><rect x="214" y="76" width="12" height="12" rx="1" opacity="0.6799999999999999"/><rect x="230" y="76" width="12" height="12" rx="1" opacity="0.5549999999999999"/><rect x="246" y="76" width="12" height="12" rx="1" opacity="0.43"/><rect x="262" y="76" width="12" height="12" rx="1" opacity="0.305"/><rect x="278" y="76" width="12" height="12" rx="1" opacity="0.18"/><rect x="294" y="76" width="12" height="12" rx="1" opacity="0.7424999999999999"/></g></svg></figure>
+        <h3>PyTorch AnimeGAN &amp; tooling</h3>
+        <p>Training-stability work and multi-GPU support on a widely used image-generation project;
+           plus a VRAM calculator for language-model workloads and a chess engine from first principles.</p>
+        <ul><li>PyTorch</li><li>TensorFlow</li><li>Reinforcement learning</li></ul>
+        <div class="out"><strong>188&#9733;</strong> stars on PyTorch AnimeGAN</div>
+        <a class="go" href="https://github.com/miniHaLe" target="_blank" rel="noopener"
+           aria-label="View open-source work on GitHub (opens in a new tab)">github.com/miniHaLe <span aria-hidden="true">&#8599;</span></a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="pad" id="method">
+  <div class="wrap split">
+    <div class="sticky">
+      <p class="eyebrow" data-scramble>[ HOW I WORK ]</p>
+      <h2 class="disp"><span class="ln"><span>Anyone can make</span></span>
+          <span class="ln"><span>a model <span class="hl">agree</span></span></span>
+          <span class="ln"><span>with them.</span></span></h2>
+      <p class="lede reveal">The job is building something that can be audited.</p>
+    </div>
+    <div class="plist">
+      <div class="reveal"><div class="k">A</div><div><h3>Automation proposes, a human approves</h3>
+        <p>Nothing the system infers is treated as fact until a person confirms it.</p></div></div>
+      <div class="reveal"><div class="k">B</div><div><h3>No silent failure</h3>
+        <p>Dead-letter queues and diagnosable errors. A failed evaluation is always visible and recoverable.</p></div></div>
+      <div class="reveal"><div class="k">C</div><div><h3>Honest test gates</h3>
+        <p>Accuracy checks that skip rather than pass when real validation data is missing. False assurance is worse than none.</p></div></div>
+      <div class="reveal"><div class="k">D</div><div><h3>Access control by design</h3>
+        <p>Separation enforced in the token, least-privilege responses, permissions on the actions that matter.</p></div></div>
+      <div class="reveal"><div class="k">E</div><div><h3>Reversible releases</h3>
+        <p>Continuous delivery with automatic rollback, and runbooks so nothing depends on one person being reachable.</p></div></div>
+      <div class="reveal"><div class="k">F</div><div><h3>Handover as a deliverable</h3>
+        <p>Architecture and operating documentation written alongside the code, not after it.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="pad">
+  <div class="wrap">
+    <p class="eyebrow" data-scramble>[ TRACK RECORD ]</p>
+    <div class="tl">
+      <div class="tl-row reveal"><div class="when">Jul 2025 &mdash; present</div>
+        <div><h3>AI Engineer &middot; DFlo</h3>
+          <p>Primary author of Sauron. Also delivered conveyor-belt dish counting for Golden Gate,
+             a video-intelligence platform handling 24h+ libraries, and meeting intelligence deployed
+             to Azure with infrastructure-as-code.</p></div></div>
+      <div class="tl-row reveal"><div class="when">Nov 2024 &mdash; present</div>
+        <div><h3>Independent full-stack engineer</h3>
+          <p>Six production business systems delivered solo for Vietnamese SMEs: requirements
+             through security review to deployment, for clients with no in-house IT.</p></div></div>
+      <div class="tl-row reveal"><div class="when">Feb &mdash; Jun 2025</div>
+        <div><h3>AI Engineer &middot; Rainscales (contract)</h3>
+          <p>Casino floor detection and gesture recognition; warehouse layout rules for Linfox derived
+             from depth estimation.</p></div></div>
+      <div class="tl-row reveal"><div class="when">Jun 2023 &mdash; Jan 2025</div>
+        <div><h3>AI Engineer &middot; Viettel Solutions</h3>
+          <p>TesselAI from internal proposal to a $500K-revenue product, and a ~3&times; inference
+             throughput gain on unchanged hardware.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="close" id="contact">
+  <div class="wrap">
+    <p class="eyebrow" data-scramble>[ GET IN TOUCH ]</p>
+    <h2 class="disp"><span class="ln"><span>If you have a camera</span></span>
+        <span class="ln"><span>and a problem, I have</span></span>
+        <span class="ln"><span>a <span class="hl">shipping record.</span></span></span></h2>
+    <p class="lede reveal">Open to AI product roles in Vietnam, remote, or relocation for the
+      right role. Private repositories can be opened for review under a mutual NDA &mdash; I reply
+      within two business days.</p>
+    <div class="cta-row reveal">
+      <a class="btn mag" href="mailto:thanhha.le@outlook.com"><span>Start a conversation</span></a>
+      <a class="btn ghost mag dl" data-cv href="Ha.LeNguyenThanh_CV_Vingroup.pdf"
+         type="application/pdf" download>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4.5-4.5M12 15l-4.5-4.5M4 20h16"/></svg>
+        <span>Download CV</span></a>
+    </div>
+    <p class="dl-meta reveal">PDF &middot; 240&nbsp;KB &middot; updated September 2026</p>
+    <p class="links-label reveal">Or reach me directly</p>
+    <div class="links">
+      <a href="mailto:thanhha.le@outlook.com">thanhha.le@outlook.com</a>
+      <a href="tel:+84396913492">+84&nbsp;396&nbsp;913&nbsp;492</a>
+      <a href="https://github.com/miniHaLe" target="_blank" rel="noopener">github.com/miniHaLe</a>
+      <a href="https://linkedin.com/in/hale03" target="_blank" rel="noopener">linkedin.com/in/hale03</a>
+    </div>
+    <footer>
+      <span>Le Nguyen Thanh Ha &mdash; AI product engineer</span>
+      <span>797 commits &middot; 75 reviewed pull requests &middot; verifiable</span>
+    </footer>
+  </div>
+</section>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var fine   = matchMedia('(pointer:fine)').matches;
+  var hasGsap = typeof window.gsap !== 'undefined';
+  if(hasGsap && window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
+
+  /* <html lang> is authored above; this only covers the file being embedded
+     somewhere that strips it. */
+  if(!document.documentElement.lang) document.documentElement.lang = 'en';
+
+  /* The preloader covers the viewport for ~2.4s while the content beneath stays
+     focusable, so Tab lands on targets nobody can see. Gate it for exactly as
+     long as the cover-up animation runs. Skipped under reduced motion, where
+     #pre is display:none and animationend would never fire. */
+  (function gatePreload(){
+    var pre = document.getElementById('pre');
+    if(!pre || reduce) return;
+    var covered = [document.querySelector('main'), document.querySelector('.dock'),
+                   document.querySelector('.hail'), document.querySelector('.skip')];
+    covered.forEach(function(el){ if(el) el.inert = true; });
+    var released = false;
+    function release(){
+      if(released) return;
+      released = true;
+      covered.forEach(function(el){ if(el) el.inert = false; });
+      /* The cover-up is cleared by JS, not only by the CSS animation's forwards fill.
+         A tab opened in the background throttles that animation, which leaves #pre
+         at pointer-events:auto over the whole viewport with no way out. */
+      pre.style.visibility = 'hidden';
+      pre.style.pointerEvents = 'none';
+    }
+    pre.addEventListener('animationend', release, {once:true});
+    setTimeout(release, 3000);
+    /* A backgrounded tab may not run the animation at all; clear on first sight. */
+    if(document.hidden) document.addEventListener('visibilitychange', function h(){
+      if(!document.hidden){ release(); document.removeEventListener('visibilitychange', h); }
+    });
+  })();
+
+  var themeBtn = document.getElementById('themeBtn');
+  function applyTheme(mode){
+    document.documentElement.setAttribute('data-theme', mode);
+    // The label names the action the button performs next, not its state.
+    themeBtn.setAttribute('aria-label',
+      mode === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+    try { localStorage.setItem('theme', mode); } catch(e){}
+    dispatchEvent(new Event('themechange'));   /* canvas re-reads its cached paint tokens */
+  }
+  (function restoreTheme(){
+    var saved = null;
+    try { saved = localStorage.getItem('theme'); } catch(e){}
+    if(saved === 'dark' || saved === 'light') applyTheme(saved);
+    else themeBtn.setAttribute('aria-label',
+      matchMedia('(prefers-color-scheme: light)').matches
+        ? 'Switch to dark theme' : 'Switch to light theme');
+  })();
+  themeBtn.addEventListener('click', function(){
+    var current = document.documentElement.getAttribute('data-theme');
+    if(!current) current = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+  });
+
+  var clockEl = document.getElementById('clock'), clockIv = null;
+  function tick(){
+    clockEl.textContent =
+      new Date().toLocaleTimeString('en-GB',{timeZone:'Asia/Ho_Chi_Minh',hour12:false}) + ' ICT';
+  }
+  /* A second-by-second repaint in a backgrounded tab buys nothing. */
+  function runClock(){ tick(); if(!clockIv) clockIv = setInterval(tick, 1000); }
+  function stopClock(){ if(clockIv){ clearInterval(clockIv); clockIv = null; } }
+  runClock();
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden) stopClock(); else runClock();
+  });
+
+  var bits = ['Computer vision','YOLO11 + ReID','Vision-language QC','Multi-camera tracking',
+              'FastAPI &middot; NestJS','Agentic analytics','Triton &middot; ONNX','Automated rollback'];
+  var line = bits.map(function(b,i){ return (i%3===1? '<b>'+b+'</b>' : b); }).join('<span>/</span>');
+  var track = document.getElementById('tickA');
+  track.innerHTML = line + '<span>/</span>' + line + '<span>/</span>';
+
+  /* preloader: knob travels the track while the number climbs */
+  if(!reduce){
+    /* The number now reports the share of webfont faces actually loaded, and the
+       curtain lifts the moment they are ready. MIN avoids a flicker on a warm
+       cache; CAP means a slow font CDN can never hold the page hostage. */
+    var MIN = 300, CAP = 600, t0 = performance.now(), preDone = false;
+    var num = document.getElementById('preNum'), knob = document.getElementById('preKnob');
+    var preEl = document.getElementById('pre');
+    function fontRatio(){
+      var total = 0, done = 0;
+      if(document.fonts && document.fonts.forEach)
+        document.fonts.forEach(function(fc){ total++; if(fc.status === 'loaded') done++; });
+      return total ? done / total : 0;
+    }
+    function paintPre(p){
+      var v = Math.round(p * 100);
+      num.textContent = v + '%';
+      knob.style.left = v + '%';
+      knob.style.transform = 'translate(-' + v + '%,-50%)';
+    }
+    var preIv = setInterval(function(){ if(!preDone) paintPre(fontRatio()); }, 50);
+    function finishPre(){
+      if(preDone) return;
+      preDone = true; window.__preDone = true;
+      clearInterval(preIv); paintPre(1);
+      preEl.classList.add('out');
+      if(window.__heroStart) window.__heroStart();
+    }
+    function readyPre(){
+      var wait = Math.max(0, MIN - (performance.now() - t0));
+      setTimeout(finishPre, wait);
+    }
+    if(document.fonts && document.fonts.ready) document.fonts.ready.then(readyPre, readyPre);
+    else readyPre();
+    setTimeout(finishPre, CAP);
+  }
+
+  /* ── text scramble: type resolves the way OCR resolves ─────────────── */
+  var GLYPHS = '#$%&/<>[]{}*+=ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  function scramble(el){
+    var final = el.dataset.final || el.textContent;
+    el.dataset.final = final;
+    var frame = 0, total = final.length, done = 0;
+    var id = setInterval(function(){
+      frame++;
+      if(frame % 2 === 0) done = Math.min(total, done + 1);
+      var out = '';
+      for(var i=0;i<total;i++){
+        var c = final[i];
+        if(i < done || c === ' ') out += c;
+        else out += GLYPHS[(Math.random()*GLYPHS.length)|0];
+      }
+      el.textContent = out;
+      if(done >= total) clearInterval(id);
+    }, 28);
+  }
+
+  /* ── hero field: points thread to the cursor; ambient detections ───── */
+  var cv = document.getElementById('field'), ctx = cv.getContext('2d');
+  var pts = [], boxes = [], w = 0, h = 0, mx = -999, my = -999, raf;
+  function css(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+  /* These change only on theme switch, so reading them every frame put a
+     getComputedStyle in the hot path where styles are already dirty. */
+  var paintDot = css('--dot'), paintAcc = css('--accent');
+  addEventListener('themechange', function(){ paintDot = css('--dot'); paintAcc = css('--accent'); });
+  function size(){
+    var dpr = Math.min(devicePixelRatio || 1, 2);
+    w = cv.clientWidth; h = cv.clientHeight;
+    cv.width = w*dpr; cv.height = h*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  function newBox(){
+    var bw = 110 + Math.random()*180, bh = 80 + Math.random()*130;
+    return {x:Math.random()*Math.max(1,w-bw), y:Math.random()*Math.max(1,h-bh),
+            w:bw, h:bh, life:0, ttl:200+Math.random()*280};
+  }
+  function seed(){
+    pts = [];
+    var n = Math.round(Math.min(70, Math.max(22, w/20)));
+    for(var i=0;i<n;i++) pts.push({x:Math.random()*w, y:Math.random()*h,
+      vx:(Math.random()-.5)*.2, vy:(Math.random()-.5)*.2, r:Math.random()*1.5+.6});
+    boxes = [newBox(), newBox(), newBox()];
+  }
+  function bracket(x,y,bw,bh,c){
+    ctx.beginPath();
+    ctx.moveTo(x,y+c); ctx.lineTo(x,y); ctx.lineTo(x+c,y);
+    ctx.moveTo(x+bw-c,y); ctx.lineTo(x+bw,y); ctx.lineTo(x+bw,y+c);
+    ctx.moveTo(x,y+bh-c); ctx.lineTo(x,y+bh); ctx.lineTo(x+c,y+bh);
+    ctx.moveTo(x+bw-c,y+bh); ctx.lineTo(x+bw,y+bh); ctx.lineTo(x+bw,y+bh-c);
+    ctx.stroke();
+  }
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    var dot = paintDot, acc = paintAcc;
+    ctx.fillStyle = dot;
+    for(var i=0;i<pts.length;i++){
+      var p = pts[i];
+      p.x += p.vx; p.y += p.vy;
+      if(p.x<-10) p.x = w+10; if(p.x>w+10) p.x = -10;
+      if(p.y<-10) p.y = h+10; if(p.y>h+10) p.y = -10;
+      var d = Math.hypot(p.x-mx, p.y-my);
+      ctx.globalAlpha = d < 190 ? .16 + (1 - d/190)*.5 : .16;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.2832); ctx.fill();
+      if(d < 190){
+        ctx.strokeStyle = acc; ctx.lineWidth = .7;
+        ctx.globalAlpha = (1 - d/190) * .3;
+        ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(mx,my); ctx.stroke();
+      }
+    }
+    ctx.strokeStyle = acc; ctx.lineWidth = 1;
+    for(var b=0;b<boxes.length;b++){
+      var o = boxes[b]; o.life++;
+      var f = Math.min(1,o.life/26) * Math.min(1,(o.ttl-o.life)/40);
+      ctx.globalAlpha = Math.max(0,f) * .3;
+      bracket(o.x, o.y, o.w, o.h, 13);
+      if(o.life > o.ttl) boxes[b] = newBox();
+    }
+    if(mx > -900){
+      ctx.globalAlpha = .5; ctx.strokeStyle = acc; ctx.lineWidth = 1;
+      bracket(mx-58, my-42, 116, 84, 12);
+    }
+    ctx.globalAlpha = 1;
+    raf = requestAnimationFrame(draw);
+  }
+  size(); seed();
+  /* The canvas has no reason to run in a hidden tab or five screens below the
+     hero; both were previously true for the whole session. */
+  var canvasOn = false;
+  function startCanvas(){ if(canvasOn || reduce) return; canvasOn = true; raf = requestAnimationFrame(draw); }
+  function stopCanvas(){ if(!canvasOn) return; canvasOn = false; cancelAnimationFrame(raf); }
+  if(reduce){ draw(); cancelAnimationFrame(raf); }
+  else {
+    startCanvas();
+    var heroEl = document.querySelector('.hero');
+    if(window.IntersectionObserver && heroEl){
+      new IntersectionObserver(function(es){
+        es.forEach(function(e){ e.isIntersecting && !document.hidden ? startCanvas() : stopCanvas(); });
+      }, {threshold:0}).observe(heroEl);
+    }
+    document.addEventListener('visibilitychange', function(){
+      if(document.hidden) stopCanvas();
+      else if(!heroEl || heroEl.getBoundingClientRect().bottom > 0) startCanvas();
+    });
+  }
+  var rt; addEventListener('resize', function(){ clearTimeout(rt);
+    rt = setTimeout(function(){ size(); seed(); }, 180); });
+
+  /* ── cursor reticle + magnetic buttons ─────────────────────────────── */
+  var cur = document.getElementById('cur'), cx = 0, cy = 0, tx = 0, ty = 0, scale = 1, ts = 1;
+  addEventListener('mousemove', function(e){
+    if(!document.body.classList.contains('moved')){
+      cx = tx = e.clientX; cy = ty = e.clientY;
+      document.body.classList.add('moved');
+    }
+    tx = e.clientX; ty = e.clientY;
+    var hero = document.querySelector('.hero').getBoundingClientRect();
+    mx = e.clientX - hero.left; my = e.clientY - hero.top;
+    if(my < 0 || my > hero.height){ mx = -999; my = -999; }
+  });
+  document.querySelectorAll('a,button,.slab').forEach(function(el){
+    el.addEventListener('mouseenter', function(){ ts = 2.1; });
+    el.addEventListener('mouseleave', function(){ ts = 1; });
+  });
+  if(fine){
+    (function loop(){
+      cx += (tx-cx)*.18; cy += (ty-cy)*.18; scale += (ts-scale)*.14;
+      cur.style.transform = 'translate('+(cx-17)+'px,'+(cy-17)+'px) scale('+scale.toFixed(3)+')';
+      requestAnimationFrame(loop);
+    })();
+  }
+
+  if(fine && !reduce){
+    document.querySelectorAll('.mag').forEach(function(el){
+      el.addEventListener('mousemove', function(e){
+        var r = el.getBoundingClientRect();
+        el.style.transform = 'translate(' + ((e.clientX - (r.left+r.width/2)) * .26) + 'px,'
+                                          + ((e.clientY - (r.top+r.height/2)) * .36) + 'px)';
+      });
+      el.addEventListener('mouseleave', function(){ el.style.transform = ''; });
+      el.style.transition = 'transform .45s cubic-bezier(.2,.9,.3,1)';
+    });
+  }
+
+  document.body.classList.add('ready');
+  if(reduce || !hasGsap){
+    document.querySelectorAll('[data-scramble]').forEach(function(el){ el.dataset.final = el.textContent; });
+    return;
+  }
+
+  /* ── choreography ──────────────────────────────────────────────────── */
+  var heroTL = gsap.timeline({paused:true});
+  heroTL.from('h1 .ln > span', {yPercent:110, duration:1.15, stagger:.09,
+      ease:'expo.out'}, 0)
+    .from('.dock, .hail', {y:-24, opacity:0, duration:.8, stagger:.08,
+      ease:'power3.out'}, .1)
+    .from('.tagline, .thesis, .hero .cta-row, .hero .dl-meta, .scroll-cue, .hero .meta',
+      {y:26, opacity:0, duration:.9, stagger:.08, ease:'power3.out'}, .25)
+    .call(function(){
+      var tag = document.querySelector('.hero .tagline');
+      if(tag) scramble(tag);
+    }, null, .3);
+  window.__heroStart = function(){ heroTL.play(); };
+  /* Reduced motion hides #pre outright, and the curtain may already be gone. */
+  var preNode = document.getElementById('pre');
+  if(window.__preDone || !preNode || getComputedStyle(preNode).display === 'none') heroTL.play();
+
+  gsap.to('.hero .wrap', {yPercent:-14, opacity:.15, ease:'none',
+    scrollTrigger:{trigger:'.hero', start:'top top', end:'bottom top', scrub:.6}});
+
+  gsap.utils.toArray('h2').forEach(function(h){
+    gsap.from(h.querySelectorAll('.ln > span'), {
+      yPercent:110, duration:1, stagger:.08, ease:'expo.out',
+      scrollTrigger:{trigger:h, start:'top 84%'}});
+  });
+
+  /* labels decode themselves when they arrive */
+  gsap.utils.toArray('[data-scramble]').forEach(function(el){
+    ScrollTrigger.create({trigger:el, start:'top 92%', once:true,
+      onEnter:function(){ scramble(el); }});
+  });
+
+  gsap.utils.toArray('.reveal').forEach(function(el){
+    gsap.from(el, {y:24, opacity:0, duration:.8, ease:'power3.out',
+      scrollTrigger:{trigger:el, start:'top 88%'}});
+  });
+
+  var half = track.scrollWidth / 2;
+  var tk = gsap.to(track, {x:-half, duration:26, ease:'none', repeat:-1});
+  ScrollTrigger.create({onUpdate:function(s){ tk.timeScale(s.direction === 1 ? 1 : -1); }});
+
+  /* WCAG 2.2.2. `held` is the user's explicit choice and outranks hover: pointer-out
+     must not restart something they deliberately stopped. */
+  (function tickerControl(){
+    var btn = document.getElementById('tickBtn');
+    var bar = document.querySelector('.ticker');
+    if(!btn || !bar) return;
+    var held = false;
+    function paint(){
+      var paused = tk.paused();
+      btn.textContent = paused ? 'Play' : 'Pause';
+      btn.setAttribute('aria-label', paused
+        ? 'Resume the scrolling list of tools and skills'
+        : 'Pause the scrolling list of tools and skills');
+    }
+    btn.addEventListener('click', function(){
+      held = !tk.paused();
+      held ? tk.pause() : tk.resume();
+      paint();
+    });
+    bar.addEventListener('pointerenter', function(){ if(!held){ tk.pause(); paint(); } });
+    bar.addEventListener('pointerleave', function(){ if(!held){ tk.resume(); paint(); } });
+    bar.addEventListener('focusin',  function(){ if(!held){ tk.pause();  paint(); } });
+    bar.addEventListener('focusout', function(e){
+      if(!held && !bar.contains(e.relatedTarget)){ tk.resume(); paint(); }
+    });
+    paint();
+  })();
+
+  var rail = document.getElementById('rail');
+  /* These two keys mirror the CSS media queries exactly. The height gate is the
+     point: a pinned rail on a short viewport clips the card it is showing. */
+  ScrollTrigger.matchMedia({
+    '(min-width: 1001px) and (min-height: 760px)': function(){
+      var dist = function(){ return rail.scrollWidth - innerWidth + 60; };
+      var tween = gsap.to(rail, {x:function(){ return -dist(); }, ease:'none',
+        scrollTrigger:{trigger:'#reel', start:'top top',
+          end:function(){ return '+=' + dist(); },
+          pin:true, scrub:.8, invalidateOnRefresh:true, anticipatePin:1}});
+      gsap.from('.slab', {y:60, opacity:0, duration:.7, stagger:.06, ease:'power3.out',
+        scrollTrigger:{trigger:'#reel', start:'top 65%'}});
+
+      /* While pinned, the browser cannot scroll a focused card into view: horizontal
+         position is driven by scrollY, so tabbing left seven links off-screen with no
+         visible ring. Translate focus into the scroll position that centres it. */
+      function focusIntoView(e){
+        var st = tween.scrollTrigger;
+        if(!st) return;
+        var slab = e.target.closest && e.target.closest('.slab');
+        if(!slab) return;
+        var slabs = Array.prototype.slice.call(rail.querySelectorAll('.slab'));
+        var i = slabs.indexOf(slab);
+        if(i < 0 || slabs.length < 2) return;
+        st.scroll(st.start + (i / (slabs.length - 1)) * (st.end - st.start));
+      }
+      rail.addEventListener('focusin', focusIntoView);
+      return function(){ rail.removeEventListener('focusin', focusIntoView); };
+    },
+    '(max-width: 1000px), (max-height: 759px)': function(){
+      gsap.utils.toArray('.slab').forEach(function(s){
+        gsap.from(s, {y:36, opacity:0, duration:.7, ease:'power3.out',
+          scrollTrigger:{trigger:s, start:'top 88%'}});
+      });
+    }
+  });
+
+  /* Anchor navigation. The pin mutates document height as it resolves, so a native
+     jump computed before refresh lands short; and browser smooth-scroll across an
+     8000px document took multiple seconds. Refresh, then animate at a fixed duration. */
+  (function anchorNav(){
+    /* The skip link is excluded on purpose: it must land immediately. */
+    document.querySelectorAll('a[href^="#"]:not(.skip)').forEach(function(a){
+      var id = a.getAttribute('href');
+      if(id === '#' || !document.querySelector(id)) return;
+      a.addEventListener('click', function(e){
+        var target = document.querySelector(id);
+        if(!target) return;
+        e.preventDefault();
+        ScrollTrigger.refresh();
+        var max = Math.max(0, document.documentElement.scrollHeight - innerHeight);
+        var top = Math.max(0, Math.min(target.getBoundingClientRect().top + scrollY - 96, max));
+        var o = {y: scrollY};
+        gsap.to(o, {y:top, duration:.75, ease:'power2.inOut', overwrite:true,
+          onUpdate:function(){ scrollTo(0, o.y); },
+          onComplete:function(){
+            target.setAttribute('tabindex','-1');
+            target.focus({preventScroll:true});
+          }});
+      });
+    });
+  })();
+
+  gsap.utils.toArray('.count').forEach(function(el){
+    var to = +el.dataset.to, o = {v:0};
+    el.textContent = '0';
+    var tw = gsap.to(o, {v:to, duration:1.6, ease:'power2.out',
+      scrollTrigger:{trigger:el, start:'top 90%'},
+      onUpdate:function(){ el.textContent = Math.round(o.v); },
+      onComplete:function(){ el.textContent = to; }});
+    /* A hidden tab throttles rAF, which can strand the tween on an intermediate
+       value. Snap to the true number rather than display a false one. */
+    document.addEventListener('visibilitychange', function(){
+      if(document.hidden && tw.progress() > 0 && tw.progress() < 1){
+        tw.progress(1); el.textContent = to;
+      }
+    });
+  });
+
+  gsap.utils.toArray('.tl-row').forEach(function(r){
+    gsap.from(r, {x:-30, opacity:0, duration:.75, ease:'power3.out',
+      scrollTrigger:{trigger:r, start:'top 90%'}});
+  });
+})();
+</script>
+<script>
+/* The CV is a real file next to this page, so the href does the download. The only
+   failure this page can actually detect is the file not being deployed alongside it:
+   one HEAD request at idle, and if it 404s the buttons become an email request
+   instead of a link that silently does nothing. */
+(function(){
+  var btns = document.querySelectorAll('[data-cv]');
+  if(!btns.length) return;
+  var href = btns[0].getAttribute('href');
+  function fallback(){
+    btns.forEach(function(b){
+      b.setAttribute('href', 'mailto:thanhha.le@outlook.com?subject=' +
+        encodeURIComponent('CV request \u2014 Le Nguyen Thanh Ha'));
+      b.removeAttribute('download');
+      b.removeAttribute('type');
+      var s = b.querySelector('span:last-of-type');
+      if(s) s.textContent = 'Email me for the CV';
+    });
+    var meta = document.querySelectorAll('.dl-meta');
+    for(var i=0;i<meta.length;i++) meta[i].textContent = 'PDF sent by reply, usually same day';
+  }
+  function check(){
+    if(!window.fetch){ return; }            /* no probe available: leave the link alone */
+    fetch(href, {method:'HEAD'}).then(function(r){ if(!r.ok) fallback(); })
+      .catch(function(){
+        /* file:// and some static hosts reject HEAD without the file being missing,
+           so only a definite non-ok response downgrades the button. */
+      });
+  }
+  if('requestIdleCallback' in window) requestIdleCallback(check, {timeout:3000});
+  else setTimeout(check, 1600);
+})();
+</script>
