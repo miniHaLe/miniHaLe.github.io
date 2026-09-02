@@ -1,0 +1,4 @@
+file | author | license | source
+kitchen-02.jpg | USDAgov | Public domain | https://commons.wikimedia.org/wiki/File:20120608-OSEC-RBN-2453_(7170162053).jpg
+camera-02.jpg | Punit Rajpal | CC0 | https://commons.wikimedia.org/wiki/File:CCTV_cameras_in_Mumbai.jpg
+mkt-01.jpg | Rakoon | CC0 | https://commons.wikimedia.org/wiki/File:Detergents-department-ramat-gan-supermarket-october-2015.jpg

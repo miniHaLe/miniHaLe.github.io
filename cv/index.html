@@ -18,6 +18,19 @@
 <meta name="twitter:description" content="I teach machines to watch, judge, and report. Computer vision and LLM systems that survive a lunch rush, not just a demo.">
 <meta name="twitter:image" content="https://minihale.github.io/cv/og-image.png">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230b0d10'/%3E%3Cg fill='none' stroke='%23ff2f43' stroke-width='2.6' stroke-linecap='square'%3E%3Cpath d='M8 12V8h4M20 8h4v4M24 20v4h-4M12 24H8v-4'/%3E%3C/g%3E%3Ccircle cx='16' cy='16' r='2.6' fill='%23f0e9df'/%3E%3C/svg%3E">
+<!-- Photography, with thanks. All CC0 or public domain: no attribution is
+     required, none appears on the page, and this note is the credit.
+       design/assets/photos/frame-shelf.jpg
+         Rakoon (CC0) - Detergents department, Ramat Gan supermarket, 2015
+         https://commons.wikimedia.org/wiki/File:Detergents-department-ramat-gan-supermarket-october-2015.jpg
+       design/assets/photos/frame-line.jpg
+         USDAgov (public domain) - kitchen line during service
+         https://commons.wikimedia.org/wiki/File:20120608-OSEC-RBN-2453_(7170162053).jpg
+       design/assets/photos/frame-sensors.jpg
+         Punit Rajpal (CC0) - CCTV cameras in Mumbai
+         https://commons.wikimedia.org/wiki/File:CCTV_cameras_in_Mumbai.jpg
+     Each is shipped as neutral grayscale and tinted by CSS blend mode so one
+     file serves both themes; originals are in design/assets/photos/_source/. -->
 <style>
 /* ══ tokens ══════════════════════════════════════════════════════════════
    Cold near-black ground lit by one warm aubergine-red bloom, warm cream
@@ -39,6 +52,8 @@
   --grid:rgba(240,233,223,.045);
   --grain:.038;
   --grain-blend:overlay;
+  --img-blend:screen; --img-opacity:.58; --img-contrast:1.12;
+  --depth:1400px;
 }
 :root[data-theme="light"]{
   --ground:#f0ece4; --surface:#fffdf9; --surface-2:#e7e1d5; --line:#aca291;
@@ -47,6 +62,7 @@
   --accent:#c30a1c; --on-accent:#fffdf9; --bloom:rgba(176,148,116,.22); --bloom-2:rgba(22,23,27,.05);
   --dot:rgba(22,23,27,.9); --grid:rgba(22,23,27,.095); --grain:.06;
   --grain-blend:multiply;
+  --img-blend:multiply; --img-opacity:.72; --img-contrast:1.04;
 }
 @media (prefers-color-scheme: light){
   :root:not([data-theme="dark"]){
@@ -56,6 +72,7 @@
     --accent:#c30a1c; --on-accent:#fffdf9; --bloom:rgba(176,148,116,.22); --bloom-2:rgba(22,23,27,.05);
     --dot:rgba(22,23,27,.9); --grid:rgba(22,23,27,.095); --grain:.06;
     --grain-blend:multiply;
+    --img-blend:multiply; --img-opacity:.72; --img-contrast:1.04;
   }
 }
 
@@ -140,7 +157,7 @@ section{position:relative}
 .dock{position:fixed; top:calc(18px + env(safe-area-inset-top)); left:50%; transform:translateX(-50%); z-index:900;
   display:flex; align-items:center; gap:26px; padding:11px 12px 11px 20px;
   border:1px solid var(--line-strong); border-radius:999px;
-  background:color-mix(in srgb, var(--surface) 82%, transparent);
+  background:color-mix(in srgb, var(--surface) 94%, transparent);
   backdrop-filter:blur(14px); font-family:"JetBrains Mono",monospace;
   font-size:12px; letter-spacing:.13em; text-transform:uppercase}
 .dock .sig{display:inline-flex; align-items:center; gap:8px; color:var(--bone)}
@@ -161,7 +178,7 @@ section{position:relative}
 .hail{position:fixed; top:calc(18px + env(safe-area-inset-top));
   right:max(22px, env(safe-area-inset-right)); z-index:900; display:flex; gap:12px;
   align-items:center; padding:9px 18px 9px 10px; border:1px solid var(--line-strong);
-  border-radius:999px; background:color-mix(in srgb, var(--surface) 82%, transparent);
+  border-radius:999px; background:color-mix(in srgb, var(--surface) 94%, transparent);
   backdrop-filter:blur(14px); text-decoration:none;
   font-family:"JetBrains Mono",monospace; font-size:12px; letter-spacing:.13em;
   text-transform:uppercase; color:var(--bone);
@@ -417,7 +434,6 @@ h2 .hl{color:var(--accent)}
 .tl{border-top:1px solid var(--line); margin-top:56px}
 .tl-row{display:grid; grid-template-columns:200px 1fr; gap:34px; padding:32px 0;
   border-bottom:1px solid var(--line); transition:transform .35s ease}
-.tl-row:hover{transform:translateX(16px)}
 .tl-row .when{font-family:"JetBrains Mono",monospace; font-size:12px;
   letter-spacing:.13em; text-transform:uppercase; color:var(--muted); padding-top:6px}
 .tl-row h3{font-family:"Bricolage Grotesque",Arial,sans-serif; font-weight:700;
@@ -447,6 +463,273 @@ footer{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
   padding:28px 0 60px; font-family:"JetBrains Mono",monospace; font-size:12px;
   letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
 
+
+/* ══ 3D composition layer ════════════════════════════════════════════════
+   Every transform below is composed in CSS from typed custom properties.
+   GSAP owns `transform` on .slab for the horizontal scrub, so a second JS
+   writer would overwrite it every frame; instead the scrub feeds --pass, the
+   pointer feeds --rx/--ry, and the single rule here combines them. Registering
+   them with @property is what lets the browser interpolate --pass smoothly and
+   keeps a missing value at 0 rather than at the string "". */
+@property --rx{syntax:"<number>"; inherits:false; initial-value:0}
+@property --ry{syntax:"<number>"; inherits:false; initial-value:0}
+@property --pass{syntax:"<number>"; inherits:false; initial-value:0}
+@property --lift{syntax:"<number>"; inherits:false; initial-value:0}
+@property --gx{syntax:"<percentage>"; inherits:false; initial-value:50%}
+@property --gy{syntax:"<percentage>"; inherits:false; initial-value:50%}
+
+/* ══ photography ═════════════════════════════════════════════════════════
+   Files are neutral grayscale; the palette is applied here, so one asset
+   serves both themes and follows the tokens if they ever change. */
+.frame{position:relative; overflow:hidden; background:var(--ground);
+  border:1px solid var(--line); border-radius:12px}
+.frame img{display:block; width:100%; height:100%; object-fit:cover;
+  filter:grayscale(1) contrast(var(--img-contrast));
+  opacity:var(--img-opacity); mix-blend-mode:var(--img-blend)}
+/* The accent never lands on the photo as a flat wash: it is a directional
+   bloom, so the frame reads as lit rather than tinted. */
+.frame::after{content:""; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(70% 90% at 22% 12%, var(--bloom), transparent 66%)}
+.frame figcaption{position:absolute; left:12px; bottom:10px; z-index:2;
+  font-family:"JetBrains Mono",monospace; font-size:12px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--bone-2);
+  background:color-mix(in srgb, var(--ground) 74%, transparent);
+  backdrop-filter:blur(6px); padding:6px 11px; border-radius:5px}
+
+/* ══ field frame: the CCTV still with a detector drawn over it ═══════════
+   This is the one section that shows the job instead of describing it: a real
+   public-domain surveillance frame with the same bracket vocabulary the hero
+   canvas draws, acquiring on scroll. */
+.field{padding:0 0 34px}
+.field .shot{position:relative; border-radius:16px; overflow:hidden;
+  border:1px solid var(--line-strong); background:var(--ground);
+  transform-style:preserve-3d;
+  transform:perspective(var(--depth))
+            rotateX(calc(var(--rx) * 1deg)) rotateY(calc(var(--ry) * 1deg));
+  transition:transform .5s cubic-bezier(.2,.9,.3,1)}
+.field .shot img{display:block; width:100%; height:auto;
+  filter:grayscale(1) contrast(var(--img-contrast));
+  opacity:var(--img-opacity); mix-blend-mode:var(--img-blend)}
+.field .det{position:absolute; inset:0; width:100%; height:100%; z-index:2}
+.field .det rect{fill:none; stroke:var(--accent); stroke-width:.28;
+  stroke-dasharray:2.4 1.4; opacity:0}
+.field .det .cnr{fill:none; stroke:var(--accent); stroke-width:.5;
+  stroke-linecap:square; opacity:0}
+.field .det text{font-family:"JetBrains Mono",monospace; font-size:1.9px;
+  letter-spacing:.14em; fill:var(--accent); opacity:0;
+  paint-order:stroke; stroke:var(--ground); stroke-width:.9px;
+  stroke-linejoin:round; vector-effect:non-scaling-stroke}
+.field .det g.on rect,.field .det g.on .cnr,.field .det g.on text{opacity:1;
+  transition:opacity .45s ease}
+.field .det g.on .cnr{animation:acq .5s cubic-bezier(.2,.9,.3,1) both}
+@keyframes acq{from{transform:scale(1.14); transform-origin:center; opacity:0}
+               to{transform:scale(1); opacity:1}}
+.field .hud{display:flex; flex-wrap:wrap; gap:10px 34px; margin-top:20px;
+  font-family:"JetBrains Mono",monospace; font-size:12px; letter-spacing:.13em;
+  text-transform:uppercase; color:var(--muted)}
+.field .hud b{color:var(--accent); font-weight:500}
+.field .cap{color:var(--bone-2); font-size:16.5px; max-width:62ch; margin:26px 0 0}
+
+/* ══ lunch-rush plate: photograph offset against the argument ════════════ */
+.plate{display:grid; grid-template-columns:1.15fr .85fr; gap:56px;
+  align-items:center; margin-top:66px}
+.plate .frame{aspect-ratio:4/3; transform-style:preserve-3d;
+  transform:perspective(var(--depth))
+            rotateY(calc(var(--ry) * 1deg)) rotateX(calc(var(--rx) * 1deg))
+            translateZ(calc(var(--lift) * 1px));
+  transition:transform .5s cubic-bezier(.2,.9,.3,1)}
+
+/* ══ sensor band: full-bleed divider ═════════════════════════════════════ */
+.band{position:relative; height:clamp(220px,32vw,420px); overflow:hidden;
+  border-block:1px solid var(--line); background:var(--ground)}
+.band img{position:absolute; inset:0; width:100%; height:130%;
+  object-fit:cover; object-position:50% 30%;
+  filter:grayscale(1) contrast(var(--img-contrast));
+  opacity:calc(var(--img-opacity) * .72); mix-blend-mode:var(--img-blend);
+  will-change:transform}
+.band .over{position:absolute; inset:0; z-index:2; display:grid;
+  place-items:center; text-align:center; padding:0 30px}
+/* The brightest part of the photograph sits exactly behind the headline, so the
+   contrast cannot be left to the image: this scrim is what the text is read
+   against, and the photograph is what it is read over. */
+.band .over::before{content:""; position:absolute; inset:0; z-index:-1;
+  background:radial-gradient(58% 62% at 50% 52%,
+    color-mix(in srgb, var(--ground) 88%, transparent),
+    color-mix(in srgb, var(--ground) 30%, transparent) 72%, transparent)}
+.band .over p{margin:0; font-family:"JetBrains Mono",monospace; font-size:12px;
+  letter-spacing:.24em; text-transform:uppercase; color:var(--bone-2)}
+.band .over b{display:block; font-family:"Bricolage Grotesque",Arial,sans-serif;
+  font-weight:800; font-variation-settings:"wdth" 84;
+  font-size:clamp(26px,4.4vw,58px); line-height:.98; letter-spacing:-.04em;
+  text-transform:uppercase; color:var(--bone); margin-top:14px; text-wrap:balance}
+
+/* ══ portrait ════════════════════════════════════════════════════════════ */
+.who-row{display:grid; grid-template-columns:280px 1fr; gap:44px;
+  align-items:center; margin:56px 0 0; padding-top:40px;
+  border-top:1px solid var(--line)}
+.portrait{position:relative; aspect-ratio:4/5; border-radius:14px;
+  overflow:hidden; border:1px solid var(--line-strong); background:var(--surface);
+  transform-style:preserve-3d;
+  transform:perspective(1000px)
+            rotateY(calc(var(--ry) * 1deg)) rotateX(calc(var(--rx) * 1deg));
+  transition:transform .5s cubic-bezier(.2,.9,.3,1)}
+.portrait img{width:100%; height:100%; object-fit:cover;
+  filter:grayscale(1) contrast(var(--img-contrast));
+  opacity:var(--img-opacity); mix-blend-mode:var(--img-blend)}
+/* Until a portrait file is dropped in, the slot is a drawn stand-in in the
+   page's own bracket vocabulary — not a grey box pretending to be a photo. */
+.portrait .stand{position:absolute; inset:0; display:grid; place-items:center;
+  background:
+    radial-gradient(60% 55% at 50% 34%, var(--bloom), transparent 70%),
+    var(--surface)}
+.portrait .stand span{font-family:"Bricolage Grotesque",Arial,sans-serif;
+  font-weight:800; font-variation-settings:"wdth" 80; font-size:58px;
+  letter-spacing:-.05em; color:var(--line-strong)}
+.portrait .rt{position:absolute; inset:14px; z-index:2; pointer-events:none}
+.portrait .rt path{fill:none; stroke:var(--accent); stroke-width:1.6;
+  stroke-linecap:square; vector-effect:non-scaling-stroke}
+.portrait figcaption{position:absolute; left:0; right:0; bottom:0; z-index:2;
+  padding:10px 12px; font-family:"JetBrains Mono",monospace; font-size:12px;
+  letter-spacing:.13em; text-transform:uppercase; color:var(--bone-2);
+  background:linear-gradient(transparent, color-mix(in srgb, var(--ground) 88%, transparent) 44%)}
+.who-row .said{margin:0; color:var(--bone-2); font-size:17.5px; max-width:52ch}
+.who-row .said b{color:var(--bone); font-weight:600}
+
+/* ══ elite hover: depth, glare, and acquisition ══════════════════════════
+   The glare is a real light source tracked to the pointer rather than a fixed
+   diagonal sweep, so two adjacent cards never highlight identically. */
+.rail{perspective:2200px; perspective-origin:50% 45%}
+/* --pass is written by the horizontal scrub (how far this card is from the
+   centre of the viewport), --rx/--ry by the pointer. Both land in one transform
+   so neither can clobber the other, which is what a second JS writer would do. */
+.slab{transform-style:preserve-3d;
+  transform:rotateY(calc((var(--pass) + var(--ry)) * 1deg))
+            rotateX(calc(var(--rx) * 1deg))
+            translateZ(calc(var(--lift) * 1px));
+  transition:border-color .3s ease, background .3s ease, box-shadow .45s ease,
+             transform .5s cubic-bezier(.2,.9,.3,1)}
+/* While the rail is scrubbing, --pass changes every frame; a half-second ease on
+   top of that reads as lag. JS adds .scrubbing for the duration of the pin. */
+.rail.scrubbing .slab{transition:border-color .3s ease, background .3s ease,
+  box-shadow .45s ease}
+.slab .glare{position:absolute; inset:0; z-index:3; pointer-events:none;
+  opacity:0; transition:opacity .4s ease; border-radius:inherit;
+  background:radial-gradient(220px 220px at var(--gx) var(--gy),
+    color-mix(in srgb, var(--bone) 13%, transparent), transparent 68%)}
+/* The whole depth-on-hover layer is gated on a real hovering pointer. A touch
+   device fires :hover on tap and then keeps it until the next tap elsewhere,
+   which left a card stuck tilted and lifted — and the tilt itself is driven by a
+   pointer position that a finger does not continuously provide. Colour, border
+   and focus feedback stay ungated below so touch and keyboard keep theirs. */
+.slab:focus-within{
+  box-shadow:0 26px 60px -24px color-mix(in srgb, var(--accent) 42%, transparent)}
+.slab > *{transform:translateZ(0)}
+.slab .viz,.slab h3,.slab .out{
+  transition:transform .5s cubic-bezier(.2,.9,.3,1), border-color .3s ease}
+.slab li{transition:transform .45s cubic-bezier(.2,.9,.3,1),
+                    border-color .3s ease, color .3s ease}
+@media (hover:hover) and (pointer:fine){
+  .slab:hover .glare{opacity:1}
+  /* box-shadow is not a compositor-only property, but only one card is ever
+     hovered and hovering does not overlap the scrub, so the cheaper unclipped
+     alternative would mean restructuring the card for no measurable gain. */
+  .slab:hover{box-shadow:0 26px 60px -24px color-mix(in srgb, var(--accent) 42%, transparent)}
+  .slab:hover .viz{transform:translateZ(34px) scale(1.012)}
+  .slab:hover h3{transform:translateZ(22px)}
+  .slab:hover .out{transform:translateZ(16px)}
+  /* Tech tags rise in sequence rather than together: one gesture, not eight. */
+  .slab:hover li{transform:translateY(-3px); border-color:var(--line-strong);
+    color:var(--bone-2)}
+  .slab:hover li:nth-child(2){transition-delay:.04s}
+  .slab:hover li:nth-child(3){transition-delay:.08s}
+  .slab:hover li:nth-child(4){transition-delay:.12s}
+  .slab:hover li:nth-child(5){transition-delay:.16s}
+}
+/* The schematic's signal layer acquires on hover, the same gesture the hero
+   canvas makes — the card demonstrates the detector it is describing. */
+.viz .sig,.viz .sig-f,.viz .sig-s{transition:opacity .3s ease}
+.slab:hover .viz .sig,.slab:focus-within .viz .sig{
+  animation:sigPulse 1.5s ease-in-out infinite}
+@keyframes sigPulse{0%,100%{opacity:1}50%{opacity:.42}}
+
+/* capability columns pick up the same depth grammar */
+.cols article{transform-style:preserve-3d;
+  transform:perspective(var(--depth))
+            rotateX(calc(var(--rx) * 1deg)) rotateY(calc(var(--ry) * 1deg));
+  transition:transform .5s cubic-bezier(.2,.9,.3,1)}
+.cols article h3,.cols article .idx{
+  transition:transform .5s cubic-bezier(.2,.9,.3,1), color .3s ease}
+@media (hover:hover) and (pointer:fine){
+  .cols article:hover h3{transform:translateZ(26px)}
+  .cols article:hover .idx{transform:translateZ(38px)}
+}
+
+/* stats: each cell tips toward the pointer and its number rises off the grid */
+.stats div{transform-style:preserve-3d; position:relative;
+  transform:perspective(1100px)
+            rotateX(calc(var(--rx) * 1deg)) rotateY(calc(var(--ry) * 1deg));
+  transition:transform .5s cubic-bezier(.2,.9,.3,1), background .3s ease}
+.stats b,.stats > span{transition:transform .5s cubic-bezier(.2,.9,.3,1)}
+.stats div:hover{background:var(--surface-2)}
+@media (hover:hover) and (pointer:fine){
+  .stats div:hover b{transform:translateZ(40px)}
+  .stats div:hover > span{transform:translateZ(14px)}
+}
+
+/* timeline rows swing on their leading edge instead of sliding flat */
+.tl{perspective:1600px}
+.tl-row{transform-style:preserve-3d; transform-origin:left center;
+  transition:transform .45s cubic-bezier(.2,.9,.3,1), background .3s ease}
+@media (hover:hover) and (pointer:fine){
+  .tl-row:hover{transform:translateX(16px) rotateY(-4deg) translateZ(26px)}
+}
+.tl-row:hover h3{color:var(--accent)}
+.tl-row h3{transition:color .3s ease}
+
+/* underline draws from the leading edge rather than fading in */
+.close .links a{position:relative; border-bottom-color:transparent;
+  background-image:linear-gradient(var(--line-strong),var(--line-strong)),
+                   linear-gradient(var(--accent),var(--accent));
+  background-size:100% 1px, 0 1px;
+  background-position:0 100%, 0 100%;
+  background-repeat:no-repeat;
+  transition:color .25s ease, background-size .4s cubic-bezier(.2,.9,.3,1)}
+.close .links a:hover,.close .links a:focus-visible{
+  color:var(--accent); background-size:100% 1px, 100% 1px}
+
+/* ══ reel progress ═══════════════════════════════════════════════════════
+   The pin removes the scrollbar's account of where you are inside seven cards.
+   This gives it back, and doubles as the count the header promises. */
+.reel-bar{display:flex; align-items:center; gap:16px; margin-top:26px}
+.reel-bar .rt{position:relative; flex:1; height:2px; background:var(--line)}
+.reel-bar .rf{position:absolute; inset:0 auto 0 0; width:0; background:var(--accent)}
+.reel-bar .rn{font-family:"JetBrains Mono",monospace; font-size:12px;
+  letter-spacing:.14em; color:var(--muted); font-variant-numeric:tabular-nums}
+
+/* ══ dock: current section ═══════════════════════════════════════════════ */
+.dock a{position:relative}
+.dock a[aria-current="true"]{color:var(--bone)}
+.dock a[aria-current="true"]::after{content:""; position:absolute;
+  left:0; right:0; bottom:-6px; height:1px; background:var(--accent)}
+
+/* ══ hero depth ══════════════════════════════════════════════════════════
+   The still sits furthest back, the canvas detector in front of it, the type
+   in front of both — three planes that separate as you scroll. */
+.hero{perspective:1200px}
+#stage{position:absolute; inset:0; z-index:0; overflow:hidden; pointer-events:none}
+#stage img{position:absolute; left:68%; top:52%;
+  width:min(1180px,104vw); transform:translate(-50%,-50%);
+  filter:grayscale(1) contrast(1.2);
+  opacity:calc(var(--img-opacity) * .42); mix-blend-mode:var(--img-blend);
+  -webkit-mask-image:radial-gradient(56% 60% at 50% 46%, #000 20%, transparent 74%);
+          mask-image:radial-gradient(56% 60% at 50% 46%, #000 20%, transparent 74%);
+  will-change:transform}
+@media (max-width:860px){
+  /* On a phone the type occupies the whole width, so there is no "beside" to
+     put the frame in; it drops to a faint ground texture. */
+  #stage img{left:50%; opacity:calc(var(--img-opacity) * .22)}
+}
+
 /* ══ responsive ══════════════════════════════════════════════════════════ */
 @media (max-width:1000px){
   .cols{grid-template-columns:1fr}
@@ -461,6 +744,13 @@ footer{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
   .pad{padding:80px 0}
   .reel-head{padding:80px 0 34px}
   .hero{padding:118px 0 84px}
+  .plate{grid-template-columns:1fr; gap:34px; margin-top:44px}
+  .who-row{grid-template-columns:1fr; gap:26px}
+  .portrait{max-width:260px}
+  .field{padding-bottom:20px}
+  /* Pointer tilt needs a pointer; on touch the cards sit flat and the depth
+     budget goes to the scroll reveals instead. */
+  .field .shot,.plate .frame,.portrait,.cols article,.stats div{transform:none}
 }
 
 /* The pin is gated on height as well as width, so a short laptop or a zoomed
@@ -468,7 +758,7 @@ footer{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
    matchMedia keys below mirror these two queries exactly. */
 @media (max-width:1000px), (max-height:759px){
   .rail{flex-wrap:wrap; padding-inline:0}
-  .reel-note{display:none}
+  .reel-note,.reel-bar{display:none}
   #reel{padding:0}
 }
 @media (min-width:1001px) and (max-height:759px){
@@ -495,6 +785,16 @@ footer{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
   html{scroll-behavior:auto}
   #pre{display:none}
   h1 .ln > span, h2 .ln > span{transform:none!important}
+  /* Depth is movement: the tilt, the lift and the parallax all go, but the
+     border and colour feedback above still lands so hover stays legible. */
+  .field .shot,.plate .frame,.portrait,.cols article,.stats div,.tl-row,
+  .slab .viz,.slab h3,.slab .out,.slab li,.cols article h3,.cols article .idx,
+  .stats b,.stats > span,#stage img,.band img{transform:none!important}
+  .slab .glare{display:none}
+  .slab:hover .viz .sig,.slab:focus-within .viz .sig{animation:none!important}
+  .close .links a{background-size:100% 1px, 0 1px!important;
+    border-bottom-color:var(--line-strong)}
+  .close .links a:hover{border-bottom-color:var(--accent)}
 }
 </style>
 
@@ -524,6 +824,10 @@ footer{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
 
 <main id="main" tabindex="-1">
 <section class="hero">
+  <div id="stage" aria-hidden="true">
+    <img src="design/assets/photos/frame-shelf.jpg" width="1600" height="899"
+         alt="" fetchpriority="low" decoding="async">
+  </div>
   <canvas id="field" aria-hidden="true"></canvas>
   <div class="wrap">
     <p class="tagline" data-scramble>[ LE NGUYEN THANH HA &mdash; AI PRODUCT ENGINEER ]</p>
@@ -557,6 +861,34 @@ footer{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
   <button class="tick-btn mono" id="tickBtn" type="button">Pause</button>
 </div>
 
+<section class="field">
+  <div class="wrap">
+    <p class="eyebrow" data-scramble>[ WHAT THE SOFTWARE SEES ]</p>
+    <figure class="shot" data-tilt="3">
+      <img src="design/assets/photos/frame-shelf.jpg" width="1600" height="899"
+           loading="lazy" decoding="async"
+           alt="A supermarket aisle photographed straight on: three shelf rows of
+                household-product facings, with a gap where stock has sold through.">
+      <svg class="det" viewBox="0 0 100 56" role="img" preserveAspectRatio="none"
+           aria-label="The same shelf with four detections drawn over it: a row of six
+                       product facings, one individual facing, one stock-keeping unit
+                       block, and a gap where the shelf has sold through."><g data-det="0"><rect x="3.6" y="7.3" width="18.1" height="14.4"/><path class="cnr" d="M3.6 8.8V7.3h1.5 M20.2 7.3h1.5v1.5 M21.7 20.2v1.5h-1.5 M5.1 21.7h-1.5v-1.5"/><text x="3.6" y="6.2">ROW 02 · 6 FACINGS</text></g><g data-det="1"><rect x="40.4" y="9" width="6.7" height="11.4"/><path class="cnr" d="M40.4 10.5V9h1.5 M45.6 9h1.5v1.5 M47.1 18.9v1.5h-1.5 M41.9 20.4h-1.5v-1.5"/><text x="40.4" y="7.9">FACING 0.96</text></g><g data-det="2"><rect x="60.2" y="39.8" width="9.8" height="11.8"/><path class="cnr" d="M60.2 41.3V39.8h1.5 M68.5 39.8h1.5v1.5 M70 50.1v1.5h-1.5 M61.7 51.6h-1.5v-1.5"/><text x="60.2" y="38.7">SKU 0.93</text></g><g data-det="3"><rect x="13.3" y="44.9" width="27.9" height="6.7"/><path class="cnr" d="M13.3 46.4V44.9h1.5 M39.7 44.9h1.5v1.5 M41.2 50.1v1.5h-1.5 M14.8 51.6h-1.5v-1.5"/><text x="13.3" y="43.8">GAP 0.84</text></g></svg>
+    </figure>
+    <div class="hud">
+      <span>Source &middot; CC0 shelf photograph</span>
+      <span>Detections &middot; <b>4</b></span>
+      <span>Classes &middot; shelf, facing, gap</span>
+      <span>Overlay &middot; drawn, not inferred</span>
+    </div>
+    <p class="cap">This is the input, not a rendering of one. A shelf-scoring model reads
+      this frame as rows, facings and the gaps between them, then turns that into a
+      compliance score a field auditor used to produce by hand. The boxes above are drawn
+      by hand to show the vocabulary &mdash; the live systems that produce them run behind
+      client NDAs, which is why the diagrams further down describe mechanisms rather than
+      replay footage.</p>
+  </div>
+</section>
+
 <section class="pad">
   <div class="wrap">
     <p class="eyebrow" data-scramble>[ WHAT I ACTUALLY DO ]</p>
@@ -583,6 +915,18 @@ footer{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
         <p>Microservices, auth, role-based access, CI/CD with rollback, four-language interfaces,
            and documentation the client can run without me in the room.</p>
       </article>
+    </div>
+    <div class="plate">
+      <figure class="frame" data-tilt="5">
+        <img src="design/assets/photos/frame-line.jpg" width="1400" height="1120"
+             loading="lazy" decoding="async"
+             alt="A restaurant cooking line mid-service: pans on open burners, one
+                  being worked with tongs, stacked service dishes behind.">
+        <figcaption>The room the software has to survive</figcaption>
+      </figure>
+      <p class="lede">A model that is right in a notebook and wrong at 12:40 on a Friday
+        has not been built yet. Every system below was tuned against the hour it actually
+        runs in &mdash; occlusion, steam, bad angles, staff moving faster than the frame rate.</p>
     </div>
   </div>
 </section>
@@ -617,10 +961,15 @@ footer{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
     <p class="access-note reveal">&ldquo;Request repository access&rdquo; opens an email. I reply
        within two business days; read access is granted under a mutual NDA.</p>
     <p class="reel-note reveal">Scroll &mdash; the reel advances</p>
+    <div class="reel-bar reveal" aria-hidden="true">
+      <span class="rt"><span class="rf" id="reelFill"></span></span>
+      <span class="rn" id="reelNum">01 / 07</span>
+    </div>
   </div>
   <div id="reel">
     <div class="rail" id="rail">
       <article class="slab">
+        <span class="glare" aria-hidden="true"></span>
         <div class="no">01/07</div>
         <div class="who">Viettel Solutions &middot; 2023&ndash;25</div>
         <figure class="viz"><svg viewBox="0 0 320 120" role="img" aria-label="Schematic: three shelf rows of product facings, one facing bracketed and scored by the vision model"><g class="st"><line x1="18" y1="26" x2="302" y2="26"/><line x1="18" y1="60" x2="302" y2="60"/><line x1="18" y1="94" x2="302" y2="94"/></g><g class="fill"><rect x="24" y="4" width="10" height="22" rx="1"/><rect x="50" y="10" width="10" height="16" rx="1"/><rect x="70" y="0" width="12" height="26" rx="1"/><rect x="100" y="8" width="10" height="18" rx="1"/><rect x="124" y="4" width="12" height="22" rx="1"/><rect x="152" y="12" width="10" height="14" rx="1"/><rect x="172" y="-4" width="12" height="30" rx="1"/><rect x="208" y="6" width="10" height="20" rx="1"/><rect x="234" y="8" width="12" height="18" rx="1"/><rect x="258" y="0" width="10" height="26" rx="1"/></g><g class="fill"><rect x="24" y="34" width="12" height="26" rx="1"/><rect x="54" y="42" width="10" height="18" rx="1"/><rect x="78" y="30" width="12" height="30" rx="1"/><rect x="112" y="40" width="10" height="20" rx="1"/><rect x="138" y="36" width="12" height="24" rx="1"/><rect x="168" y="44" width="10" height="16" rx="1"/><rect x="190" y="32" width="12" height="28" rx="1"/><rect x="224" y="38" width="10" height="22" rx="1"/><rect x="250" y="42" width="12" height="18" rx="1"/><rect x="274" y="34" width="10" height="26" rx="1"/></g><g class="fill"><rect x="24" y="74" width="10" height="20" rx="1"/><rect x="48" y="66" width="12" height="28" rx="1"/><rect x="80" y="78" width="10" height="16" rx="1"/><rect x="102" y="70" width="12" height="24" rx="1"/><rect x="132" y="64" width="10" height="30" rx="1"/><rect x="156" y="76" width="12" height="18" rx="1"/><rect x="186" y="72" width="10" height="22" rx="1"/><rect x="210" y="68" width="12" height="26" rx="1"/><rect x="242" y="76" width="10" height="18" rx="1"/><rect x="266" y="70" width="12" height="24" rx="1"/></g><g class="sig"><path class="bk" d="M132 71V64h7M157 64h7v7M164 87v7h-7M139 94h-7v-7"/></g><text class="tag ac" x="132" y="112">FACING 0.94</text></svg></figure>
@@ -632,6 +981,7 @@ footer{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
         <a class="go" href="mailto:thanhha.le@outlook.com?subject=Repository%20access%20%E2%80%94%20TesselAI" aria-label="Request repository access for TesselAI, retail shelf scoring">Request repository access <span aria-hidden="true">&rarr;</span></a>
       </article>
       <article class="slab">
+        <span class="glare" aria-hidden="true"></span>
         <div class="no">02/07</div>
         <div class="who">DFlo &middot; 2025&ndash;present</div>
         <figure class="viz"><svg viewBox="0 0 320 120" role="img" aria-label="Schematic: six services behind a single API gateway"><g class="st"><path d="M96 60 C 130 60, 140 30, 176 30"/><path d="M96 60 C 130 60, 140 50, 176 50"/><path d="M96 60 C 130 60, 140 70, 176 70"/><path d="M96 60 C 130 60, 140 90, 176 90"/><path d="M96 60 C 130 60, 140 18, 176 18"/><path d="M96 60 C 130 60, 140 110, 176 110"/></g><rect class="gw" x="26" y="42" width="70" height="36" rx="4"/><text class="tag lb" x="61" y="64">GATEWAY</text><rect class="nd" x="176" y="22" width="118" height="16" rx="3"/><text class="tag" x="184" y="33.5">VISION</text><rect class="nd" x="176" y="42" width="118" height="16" rx="3"/><text class="tag" x="184" y="53.5">QC</text><rect class="nd" x="176" y="62" width="118" height="16" rx="3"/><text class="tag" x="184" y="73.5">AGENT</text><rect class="nd" x="176" y="82" width="118" height="16" rx="3"/><text class="tag" x="184" y="93.5">DASH</text><rect class="nd" x="176" y="102" width="118" height="16" rx="3"/><text class="tag" x="184" y="113.5">DATA</text><rect class="nd" x="176" y="2" width="118" height="16" rx="3"/><text class="tag" x="184" y="13.5">AUTH</text></svg></figure>
@@ -643,6 +993,7 @@ footer{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
         <a class="go" href="mailto:thanhha.le@outlook.com?subject=Repository%20access%20%E2%80%94%20Sauron" aria-label="Request repository access for Sauron, restaurant operations AI">Request repository access <span aria-hidden="true">&rarr;</span></a>
       </article>
       <article class="slab">
+        <span class="glare" aria-hidden="true"></span>
         <div class="no">03/07</div>
         <div class="who">Golden Gate Group &middot; 2025</div>
         <figure class="viz"><svg viewBox="0 0 320 120" role="img" aria-label="Schematic: dishes counted by category as they travel a conveyor belt past two cameras"><g class="cone"><path d="M70 8 L38 62 L102 62 Z"/><path d="M222 8 L190 62 L254 62 Z"/></g><g class="st"><line x1="8" y1="72" x2="312" y2="72"/><line x1="8" y1="96" x2="312" y2="96"/></g><g class="st dash"><line x1="8" y1="84" x2="312" y2="84"/></g><circle class="fill" cx="36" cy="84" r="7"/><circle class="fill" cx="74" cy="84" r="7"/><circle class="fill" cx="112" cy="84" r="7"/><circle class="sig-f" cx="150" cy="84" r="7"/><circle class="fill" cx="188" cy="84" r="7"/><circle class="fill" cx="226" cy="84" r="7"/><circle class="fill" cx="264" cy="84" r="7"/><g class="sig"><path class="bk" d="M140 75V68h7M165 68h7v7M172 93v7h-7M147 100h-7v-7"/></g><text class="tag" x="8" y="116">BELT 03</text><text class="tag ac" x="264" y="116">COUNT 13</text></svg></figure>
@@ -654,6 +1005,7 @@ footer{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
         <a class="go" href="mailto:thanhha.le@outlook.com?subject=Repository%20access%20%E2%80%94%20KichiKichi%20belt%20counting" aria-label="Request repository access for KichiKichi belt counting">Request repository access <span aria-hidden="true">&rarr;</span></a>
       </article>
       <article class="slab">
+        <span class="glare" aria-hidden="true"></span>
         <div class="no">04/07</div>
         <div class="who">Independent &middot; 2026</div>
         <figure class="viz"><svg viewBox="0 0 320 120" role="img" aria-label="Schematic: inconsistent workbooks reconciled into one table, held at a human confirmation gate"><g class="st"><rect x="14" y="22" width="72" height="54" rx="3"/><rect x="20" y="28" width="72" height="54" rx="3"/><rect x="26" y="34" width="72" height="54" rx="3"/></g><g class="st dash"><line x1="104" y1="60" x2="150" y2="60"/></g><g class="sig"><line x1="160" y1="18" x2="160" y2="102" stroke-dasharray="4 5"/></g><text class="tag ac" x="150" y="112">HUMAN CONFIRMS</text><rect class="st" x="186" y="26" width="112" height="60" rx="3"/><g class="st"><line x1="186" y1="40" x2="298" y2="40"/><line x1="186" y1="54" x2="298" y2="54"/><line x1="186" y1="68" x2="298" y2="68"/><line x1="222" y1="26" x2="222" y2="86"/><line x1="260" y1="26" x2="260" y2="86"/></g></svg></figure>
@@ -665,6 +1017,7 @@ footer{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
         <a class="go" href="mailto:thanhha.le@outlook.com?subject=Repository%20access%20%E2%80%94%20Financial%20analytics%20platform" aria-label="Request repository access for the financial analytics platform">Request repository access <span aria-hidden="true">&rarr;</span></a>
       </article>
       <article class="slab">
+        <span class="glare" aria-hidden="true"></span>
         <div class="no">05/07</div>
         <div class="who">Independent &middot; 2026</div>
         <figure class="viz"><svg viewBox="0 0 320 120" role="img" aria-label="Schematic: branch-level data separation enforced inside the access token"><rect class="gw" x="16" y="44" width="86" height="32" rx="16"/><text class="tag lb" x="42" y="64">TOKEN</text><g class="sig"><circle cx="30" cy="60" r="5"/></g><g class="st"><path d="M102 60 C 134 60, 142 24, 174 24"/><path d="M102 60 C 134 60, 142 60, 174 60"/><path d="M102 60 C 134 60, 142 96, 174 96"/></g><rect class="nd" x="174" y="11" width="124" height="26" rx="3"/><text class="tag" x="184" y="27.5">BRANCH 1</text><rect class="nd sig-s" x="174" y="47" width="124" height="26" rx="3"/><text class="tag" x="184" y="63.5">BRANCH 2</text><rect class="nd" x="174" y="83" width="124" height="26" rx="3"/><text class="tag" x="184" y="99.5">BRANCH 3</text><g class="st dash"><line x1="160" y1="8" x2="160" y2="112"/></g></svg></figure>
@@ -676,6 +1029,7 @@ footer{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
         <a class="go" href="mailto:thanhha.le@outlook.com?subject=Repository%20access%20%E2%80%94%20Multi-branch%20operations%20platform" aria-label="Request repository access for the multi-branch operations platform">Request repository access <span aria-hidden="true">&rarr;</span></a>
       </article>
       <article class="slab">
+        <span class="glare" aria-hidden="true"></span>
         <div class="no">06/07</div>
         <div class="who">Rainscales &middot; 2025</div>
         <figure class="viz"><svg viewBox="0 0 320 120" role="img" aria-label="Schematic: fisheye camera coverage of a floor, with a raised-hand gesture detected"><g class="st dash"><path d="M160 6 m-44 0 a44 30 0 0 0 88 0"/><path d="M160 6 m-88 0 a88 60 0 0 0 176 0"/><path d="M160 6 m-132 0 a132 90 0 0 0 264 0"/></g><circle class="sig-f" cx="160" cy="6" r="4"/><g class="st"><line x1="16" y1="96" x2="16" y2="104"/><line x1="64" y1="96" x2="64" y2="104"/><line x1="112" y1="96" x2="112" y2="104"/><line x1="160" y1="96" x2="160" y2="104"/><line x1="208" y1="96" x2="208" y2="104"/><line x1="256" y1="96" x2="256" y2="104"/><line x1="304" y1="96" x2="304" y2="104"/><line x1="16" y1="100" x2="304" y2="100"/></g><g class="fill"><circle cx="64" cy="62" r="4.5"/><path class="st" d="M64 67v11M58 74h12"/></g><g class="fill"><circle cx="112" cy="70" r="4.5"/><path class="st" d="M112 75v11M106 82h12"/></g><g class="fill"><circle cx="214" cy="64" r="4.5"/><path class="st" d="M214 69v11M208 76h12"/></g><g class="fill"><circle cx="262" cy="74" r="4.5"/><path class="st" d="M262 79v11M256 86h12"/></g><g class="sig"><circle cx="160" cy="66" r="4.5"/><path d="M160 71v11M154 78h12M160 71l7-9"/><path class="bk" d="M146 63V56h7M167 56h7v7M174 83v7h-7M153 90h-7v-7"/></g><text class="tag ac" x="146" y="114">HAND RAISED</text></svg></figure>
@@ -687,6 +1041,7 @@ footer{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
         <a class="go" href="mailto:thanhha.le@outlook.com?subject=Repository%20access%20%E2%80%94%20Casino%20floor%20intelligence" aria-label="Request repository access for casino floor intelligence">Request repository access <span aria-hidden="true">&rarr;</span></a>
       </article>
       <article class="slab">
+        <span class="glare" aria-hidden="true"></span>
         <div class="no">07/07</div>
         <div class="who">Open source</div>
         <figure class="viz"><svg viewBox="0 0 320 120" role="img" aria-label="Schematic: image-to-image translation across a multi-GPU training pipeline"><g class="st"><rect x="14" y="24" width="96" height="72" rx="3"/></g><g class="fill"><rect x="18" y="28" width="12" height="12" rx="1" opacity="0.25"/><rect x="34" y="28" width="12" height="12" rx="1" opacity="0.3214285714285714"/><rect x="50" y="28" width="12" height="12" rx="1" opacity="0.39285714285714285"/><rect x="66" y="28" width="12" height="12" rx="1" opacity="0.4642857142857143"/><rect x="82" y="28" width="12" height="12" rx="1" opacity="0.5357142857142857"/><rect x="98" y="28" width="12" height="12" rx="1" opacity="0.6071428571428572"/><rect x="18" y="44" width="12" height="12" rx="1" opacity="0.6785714285714286"/><rect x="34" y="44" width="12" height="12" rx="1" opacity="0.75"/><rect x="50" y="44" width="12" height="12" rx="1" opacity="0.8214285714285714"/><rect x="66" y="44" width="12" height="12" rx="1" opacity="0.25"/><rect x="82" y="44" width="12" height="12" rx="1" opacity="0.3214285714285714"/><rect x="98" y="44" width="12" height="12" rx="1" opacity="0.39285714285714285"/><rect x="18" y="60" width="12" height="12" rx="1" opacity="0.4642857142857143"/><rect x="34" y="60" width="12" height="12" rx="1" opacity="0.5357142857142857"/><rect x="50" y="60" width="12" height="12" rx="1" opacity="0.6071428571428572"/><rect x="66" y="60" width="12" height="12" rx="1" opacity="0.6785714285714286"/><rect x="82" y="60" width="12" height="12" rx="1" opacity="0.75"/><rect x="98" y="60" width="12" height="12" rx="1" opacity="0.8214285714285714"/><rect x="18" y="76" width="12" height="12" rx="1" opacity="0.25"/><rect x="34" y="76" width="12" height="12" rx="1" opacity="0.3214285714285714"/><rect x="50" y="76" width="12" height="12" rx="1" opacity="0.39285714285714285"/><rect x="66" y="76" width="12" height="12" rx="1" opacity="0.4642857142857143"/><rect x="82" y="76" width="12" height="12" rx="1" opacity="0.5357142857142857"/><rect x="98" y="76" width="12" height="12" rx="1" opacity="0.6071428571428572"/></g><g class="st dash"><line x1="118" y1="60" x2="200" y2="60"/></g><text class="tag ac" x="128" y="52">G / D</text><g class="sig"><path class="bk" d="M202 29V22h7M299 22h7v7M306 91v7h-7M209 98h-7v-7"/></g><g class="st"><rect x="210" y="24" width="96" height="72" rx="3"/></g><g class="sig-f"><rect x="214" y="28" width="12" height="12" rx="1" opacity="0.18"/><rect x="230" y="28" width="12" height="12" rx="1" opacity="0.7424999999999999"/><rect x="246" y="28" width="12" height="12" rx="1" opacity="0.6174999999999999"/><rect x="262" y="28" width="12" height="12" rx="1" opacity="0.4925"/><rect x="278" y="28" width="12" height="12" rx="1" opacity="0.3675"/><rect x="294" y="28" width="12" height="12" rx="1" opacity="0.2425"/><rect x="214" y="44" width="12" height="12" rx="1" opacity="0.8049999999999999"/><rect x="230" y="44" width="12" height="12" rx="1" opacity="0.6799999999999999"/><rect x="246" y="44" width="12" height="12" rx="1" opacity="0.5549999999999999"/><rect x="262" y="44" width="12" height="12" rx="1" opacity="0.43"/><rect x="278" y="44" width="12" height="12" rx="1" opacity="0.305"/><rect x="294" y="44" width="12" height="12" rx="1" opacity="0.18"/><rect x="214" y="60" width="12" height="12" rx="1" opacity="0.7424999999999999"/><rect x="230" y="60" width="12" height="12" rx="1" opacity="0.6174999999999999"/><rect x="246" y="60" width="12" height="12" rx="1" opacity="0.4925"/><rect x="262" y="60" width="12" height="12" rx="1" opacity="0.3675"/><rect x="278" y="60" width="12" height="12" rx="1" opacity="0.2425"/><rect x="294" y="60" width="12" height="12" rx="1" opacity="0.8049999999999999"/><rect x="214" y="76" width="12" height="12" rx="1" opacity="0.6799999999999999"/><rect x="230" y="76" width="12" height="12" rx="1" opacity="0.5549999999999999"/><rect x="246" y="76" width="12" height="12" rx="1" opacity="0.43"/><rect x="262" y="76" width="12" height="12" rx="1" opacity="0.305"/><rect x="278" y="76" width="12" height="12" rx="1" opacity="0.18"/><rect x="294" y="76" width="12" height="12" rx="1" opacity="0.7424999999999999"/></g></svg></figure>
@@ -701,6 +1056,15 @@ footer{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
     </div>
   </div>
 </section>
+
+<div class="band">
+  <img src="design/assets/photos/frame-sensors.jpg" width="1600" height="800"
+       loading="lazy" decoding="async" alt="" id="bandImg">
+  <div class="over">
+    <p>The part nobody photographs</p>
+    <b>Cameras are cheap.<br>Being able to defend the answer is not.</b>
+  </div>
+</div>
 
 <section class="pad" id="method">
   <div class="wrap split">
@@ -770,6 +1134,18 @@ footer{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
         <span>Download CV</span></a>
     </div>
     <p class="dl-meta reveal">PDF &middot; 240&nbsp;KB &middot; updated September 2026</p>
+    <div class="who-row reveal">
+      <figure class="portrait" id="portrait" data-tilt="7">
+        <div class="stand" aria-hidden="true"><span>HA</span></div>
+        <svg class="rt" viewBox="0 0 100 125" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M0 14V0h14M86 0h14v14M100 111v14H86M14 125H0v-14"/>
+        </svg>
+        <figcaption>Le Nguyen Thanh Ha &middot; Ho Chi Minh City</figcaption>
+      </figure>
+      <p class="said">Twelve production systems, six of them delivered alone from
+        requirements to deployment. <b>I would rather show you a repository than a
+        portfolio</b> &mdash; ask, and I will open one.</p>
+    </div>
     <p class="links-label reveal">Or reach me directly</p>
     <div class="links">
       <a href="mailto:thanhha.le@outlook.com">thanhha.le@outlook.com</a>
@@ -911,10 +1287,16 @@ footer{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
   function scramble(el){
     var final = el.dataset.final || el.textContent;
     el.dataset.final = final;
-    var frame = 0, total = final.length, done = 0;
+    /* The hero tagline is triggered by both the intro timeline and the scroll
+       trigger. Two intervals on one node wrote competing frames and doubled how
+       long the label stayed unreadable. */
+    if(el.dataset.scrambled) return;
+    el.dataset.scrambled = '1';
+    /* Resolve at a fixed ~0.9s regardless of length: a 47-character label at a
+       fixed per-character rate spent 2.6s looking like a rendering fault. */
+    var total = final.length, done = 0, step = Math.max(1, Math.ceil(total / 40));
     var id = setInterval(function(){
-      frame++;
-      if(frame % 2 === 0) done = Math.min(total, done + 1);
+      done = Math.min(total, done + step);
       var out = '';
       for(var i=0;i<total;i++){
         var c = final[i];
@@ -922,8 +1304,8 @@ footer{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
         else out += GLYPHS[(Math.random()*GLYPHS.length)|0];
       }
       el.textContent = out;
-      if(done >= total) clearInterval(id);
-    }, 28);
+      if(done >= total){ clearInterval(id); el.textContent = final; }
+    }, 22);
   }
 
   /* ── hero field: points thread to the cursor; ambient detections ───── */
@@ -1051,6 +1433,65 @@ footer{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
     });
   }
 
+  /* ── pointer tilt ───────────────────────────────────────────────────
+     One listener per element, and the rect is measured once on enter rather
+     than on every move: reading it per frame put a forced layout in the middle
+     of a transform-only animation, which is the one thing that stops it being
+     compositor-only. Writes numbers into custom properties; the transform that
+     consumes them lives in the stylesheet. */
+  function tiltable(el, strength, glare){
+    var box = null;
+    function enter(){ box = el.getBoundingClientRect(); }
+    function move(e){
+      if(!box) enter();
+      var nx = (e.clientX - box.left) / box.width  - .5;
+      var ny = (e.clientY - box.top)  / box.height - .5;
+      el.style.setProperty('--ry',  (nx * strength).toFixed(2));
+      el.style.setProperty('--rx', (-ny * strength).toFixed(2));
+      if(glare){
+        el.style.setProperty('--gx', ((nx + .5) * 100).toFixed(1) + '%');
+        el.style.setProperty('--gy', ((ny + .5) * 100).toFixed(1) + '%');
+      }
+    }
+    function leave(){
+      box = null;
+      el.style.setProperty('--rx', '0');
+      el.style.setProperty('--ry', '0');
+    }
+    el.addEventListener('pointerenter', enter);
+    el.addEventListener('pointermove', move);
+    el.addEventListener('pointerleave', leave);
+    /* Keyboard arrival gets the depth without the angle: a card that tips
+       toward a pointer that is not there reads as a glitch. */
+    el.addEventListener('focusin', leave);
+  }
+  if(fine && !reduce){
+    document.querySelectorAll('[data-tilt]').forEach(function(el){
+      tiltable(el, parseFloat(el.dataset.tilt) || 5, false);
+    });
+    document.querySelectorAll('.slab').forEach(function(el){ tiltable(el, 5, true); });
+    document.querySelectorAll('.stats div').forEach(function(el){ tiltable(el, 7, false); });
+    document.querySelectorAll('.cols article').forEach(function(el){ tiltable(el, 4, false); });
+  }
+
+  /* ── portrait ───────────────────────────────────────────────────────
+     The drawn stand-in ships in the markup and the photograph replaces it only
+     once it has actually decoded, so a missing or half-loaded file leaves the
+     bracket mark rather than a broken-image icon or an empty hole. */
+  (function portrait(){
+    var fig = document.getElementById('portrait');
+    if(!fig) return;
+    var img = new Image();
+    img.onload = function(){
+      img.alt = 'Le Nguyen Thanh Ha';
+      img.width = img.naturalWidth; img.height = img.naturalHeight;
+      var stand = fig.querySelector('.stand');
+      fig.insertBefore(img, fig.firstChild);
+      if(stand) stand.remove();
+    };
+    img.src = 'design/assets/photos/portrait.jpg';
+  })();
+
   document.body.classList.add('ready');
   if(reduce || !hasGsap){
     document.querySelectorAll('[data-scramble]').forEach(function(el){ el.dataset.final = el.textContent; });
@@ -1135,12 +1576,58 @@ footer{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
   ScrollTrigger.matchMedia({
     '(min-width: 1001px) and (min-height: 760px)': function(){
       var dist = function(){ return rail.scrollWidth - innerWidth + 60; };
+      var slabs = Array.prototype.slice.call(rail.querySelectorAll('.slab'));
+      var fill = document.getElementById('reelFill'), num = document.getElementById('reelNum');
+
+      /* Each card turns according to how far its centre sits from the centre of
+         the viewport, so the rail reads as a carousel of physical panels rather
+         than a strip sliding sideways. Written as a number into --pass; the
+         transform that consumes it is in the stylesheet, alongside the pointer
+         tilt, so the two compose instead of overwriting each other. */
+      function face(){
+        var mid = innerWidth / 2, near = 0, nearD = Infinity;
+        for(var i=0;i<slabs.length;i++){
+          var r = slabs[i].getBoundingClientRect();
+          var d = (r.left + r.width/2 - mid) / mid;          /* -1 .. 1 */
+          var c = Math.max(-1.4, Math.min(1.4, d));
+          slabs[i].style.setProperty('--pass', (c * -11).toFixed(2));
+          slabs[i].style.setProperty('--lift', (-Math.abs(c) * 30).toFixed(1));
+          /* .rail sets perspective but not preserve-3d, so siblings paint in DOM
+             order and translateZ does not sort them: the furthest card was drawn
+             over the nearest one and clipped its body copy mid-word. Sort by
+             distance from centre instead. */
+          slabs[i].style.zIndex = String(50 - Math.round(Math.abs(c) * 20));
+          if(Math.abs(d) < nearD){ nearD = Math.abs(d); near = i; }
+        }
+        return near;
+      }
+      function progress(st){
+        var pct = Math.max(0, Math.min(1, st.progress));
+        if(fill) fill.style.width = (pct * 100).toFixed(1) + '%';
+        var i = face();
+        if(num) num.textContent = ('0' + (i+1)).slice(-2) + ' / 0' + slabs.length;
+      }
+
       var tween = gsap.to(rail, {x:function(){ return -dist(); }, ease:'none',
         scrollTrigger:{trigger:'#reel', start:'top top',
           end:function(){ return '+=' + dist(); },
-          pin:true, scrub:.8, invalidateOnRefresh:true, anticipatePin:1}});
+          pin:true, scrub:.8, invalidateOnRefresh:true, anticipatePin:1,
+          onUpdate:progress,
+          /* The half-second ease on .slab is right for a hover and wrong for a
+             value changing every frame, where it lands as lag behind the scroll. */
+          onToggle:function(st){ rail.classList.toggle('scrubbing', st.isActive); }}});
+      face();
+
+      /* Anchored to #work, not #reel: #reel is the pinned element, so its start
+         is recomputed on every refresh and a from() hanging off it re-asserts
+         opacity:0 each time — the cards stayed invisible for the whole pin. The
+         same trap the .tl-row comment below describes. once:true kills the
+         trigger after it fires so no later refresh can reach back into it. */
       gsap.from('.slab', {y:60, opacity:0, duration:.7, stagger:.06, ease:'power3.out',
-        scrollTrigger:{trigger:'#reel', start:'top 65%'}});
+        /* Hand the cards back to the stylesheet on arrival, or the inline
+           transform GSAP leaves behind outranks the composed 3D rule. */
+        clearProps:'transform,opacity',
+        scrollTrigger:{trigger:'#work', start:'top 55%', once:true}});
 
       /* While pinned, the browser cannot scroll a focused card into view: horizontal
          position is driven by scrollY, so tabbing left seven links off-screen with no
@@ -1207,6 +1694,82 @@ footer{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
       }
     });
   });
+
+  /* ── hero depth: three planes at three rates ────────────────────────
+     The still is furthest back and moves least, the type is nearest and moves
+     most, which is the whole reason the photograph is there rather than a flat
+     texture. */
+  (function heroDepth(){
+    var stage = document.querySelector('#stage img');
+    if(!stage) return;
+    gsap.fromTo(stage, {scale:1.06, yPercent:-2},
+      {scale:1.2, yPercent:6, ease:'none',
+       scrollTrigger:{trigger:'.hero', start:'top top', end:'bottom top', scrub:.9}});
+  })();
+
+  /* ── band parallax ─────────────────────────────────────────────────── */
+  (function band(){
+    var img = document.getElementById('bandImg');
+    if(!img) return;
+    gsap.fromTo(img, {yPercent:-12}, {yPercent:4, ease:'none',
+      scrollTrigger:{trigger:'.band', start:'top bottom', end:'bottom top', scrub:.8}});
+  })();
+
+  /* ── the detector acquires ──────────────────────────────────────────
+     Boxes land one at a time in the order a person reads the frame, not all at
+     once: four simultaneous reveals read as a graphic, one at a time reads as a
+     machine working. */
+  (function detect(){
+    var groups = document.querySelectorAll('.field .det g');
+    if(!groups.length) return;
+    ScrollTrigger.create({trigger:'.field .shot', start:'top 76%', once:true,
+      onEnter:function(){
+        groups.forEach(function(g, i){
+          setTimeout(function(){ g.classList.add('on'); }, 260 + i * 190);
+        });
+      }});
+  })();
+
+  /* ── sections arrive with depth ─────────────────────────────────────
+     Only containers that own no transform of their own and hold nothing
+     sticky: rotating a section that contains the pin or .sticky would give it a
+     containing block and break both. */
+  gsap.utils.toArray('.stats, .cols').forEach(function(el){
+    gsap.fromTo(el, {rotateX:7, transformPerspective:1400, transformOrigin:'50% 0%'},
+      {rotateX:0, ease:'none',
+       scrollTrigger:{trigger:el, start:'top 92%', end:'top 52%', scrub:.7}});
+  });
+  /* The photographic frames tip the same way, but through --rx so the pointer
+     tilt can take the same property over on hover without a fight. */
+  gsap.utils.toArray('.field .shot, .plate .frame, .portrait').forEach(function(el){
+    gsap.fromTo(el, {'--rx':6}, {'--rx':0, ease:'none',
+      scrollTrigger:{trigger:el, start:'top 90%', end:'top 50%', scrub:.7}});
+  });
+
+  /* ── which section am I in ──────────────────────────────────────────
+     The dock named three destinations and never said which one you were
+     looking at. */
+  (function spy(){
+    var links = Array.prototype.slice.call(document.querySelectorAll('.dock a[href^="#"]'));
+    if(!links.length) return;
+    var current = null;
+    function mark(id){
+      if(id === current) return;
+      current = id;
+      links.forEach(function(a){
+        if(a.getAttribute('href') === id) a.setAttribute('aria-current', 'true');
+        else a.removeAttribute('aria-current');
+      });
+    }
+    links.forEach(function(a){
+      var sec = document.querySelector(a.getAttribute('href'));
+      if(!sec) return;
+      ScrollTrigger.create({trigger:sec, start:'top 46%', end:'bottom 46%',
+        onEnter:     function(){ mark(a.getAttribute('href')); },
+        onEnterBack: function(){ mark(a.getAttribute('href')); },
+        onLeaveBack: function(){ mark(null); }});
+    });
+  })();
 
   gsap.utils.toArray('.tl-row').forEach(function(r){
     /* clearProps hands the row back to the stylesheet once it has arrived, so the
