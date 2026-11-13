@@ -1,1 +1,0 @@
-import{Ri as e}from"./index-Dw6afhnd.js";function t(){return e().reverse()}export{t};

@@ -1,1 +1,0 @@
-import{t as e}from"./export-list-xlsx-MAk8poSy.js";function t(e){return e.flatMap(e=>{let t=`accessorKey`in e?String(e.accessorKey):void 0;return!t||typeof e.header!=`string`?[]:[{header:e.header,accessor:e=>e[t]}]})}function n(t,n){return[{label:`File báo cáo`,items:[{label:`Xuất Excel File`,disabledWhen:t===0,disabledTooltip:e,onExport:async()=>{await n()}}]}]}export{n,t};

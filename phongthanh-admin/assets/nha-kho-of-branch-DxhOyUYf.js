@@ -1,1 +1,0 @@
-import{f as e}from"./index-Dw6afhnd.js";function t(t,n){if(!n)return[];let r=e(n);return t.filter(e=>e.chiNhanhId===r)}export{t};

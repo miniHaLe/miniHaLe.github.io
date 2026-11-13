@@ -1,0 +1,1 @@
+import{Ri as e}from"./index-BfkBZZsz.js";function t(){return e().reverse()}export{t};
