@@ -1,0 +1,1 @@
+import{f as e}from"./index-Jy87C_Wn.js";function t(t,n){if(!n)return[];let r=e(n);return t.filter(e=>e.chiNhanhId===r)}export{t};

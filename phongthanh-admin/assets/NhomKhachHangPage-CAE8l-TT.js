@@ -1,1 +1,0 @@
-import{t as e}from"./CrudTablePage-pmSi529O.js";import{t}from"./nhom-khach-hang.config-D2XOdXga.js";import{q as n,t as r}from"./routes-Cp-a66ng.js";var i=n();function a(){return(0,i.jsx)(e,{config:t,routePattern:r.catalogCustomerGroup})}export{a as default};

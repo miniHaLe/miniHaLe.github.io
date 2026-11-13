@@ -1,0 +1,1 @@
+import{t as e}from"./CrudTablePage-LAA3Akkd.js";import{t}from"./ngan-hang.config-C3prvYHl.js";import{q as n,t as r}from"./routes-Cp-a66ng.js";var i=n();function a(){return(0,i.jsx)(e,{config:t,routePattern:r.catalogBanks})}export{a as default};

@@ -1,0 +1,1 @@
+import{Ri as e}from"./index-Jy87C_Wn.js";function t(){return e().reverse()}export{t};

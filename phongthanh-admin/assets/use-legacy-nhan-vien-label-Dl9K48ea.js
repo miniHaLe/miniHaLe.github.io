@@ -1,0 +1,1 @@
+import{r as e}from"./rolldown-runtime-XKyaHtl9.js";import{J as t}from"./routes-Cp-a66ng.js";import{r as n}from"./api-for-p1qK4ygd.js";import{n as r,r as i,t as a}from"./nhan-vien-upload-batch-BZpVM7bV.js";var o=e(t(),1);function s(){let e=n(`nhan-vien`);return(0,o.useMemo)(()=>{if(!e)return;let t=a(),n=r();return e=>i(e,t,n)},[e])}export{s as t};
