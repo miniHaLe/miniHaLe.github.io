@@ -1,0 +1,1 @@
+import{d as e}from"./schemas-COdaY83a.js";var t=`Mật khẩu phải có ít nhất 8 ký tự`,n=`Mật khẩu mới phải khác mật khẩu cũ`,r=e().min(8,t);export{r as n,n as t};

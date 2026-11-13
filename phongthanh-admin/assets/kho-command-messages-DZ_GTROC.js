@@ -1,0 +1,1 @@
+function e(e){return`Đã xác nhận lần lưu trước: phiếu ${e} đã được ghi với nội dung đã gửi khi đó. Nội dung đang sửa chưa được lưu; kiểm tra rồi bấm Lưu nếu cần lập thêm.`}export{e as t};

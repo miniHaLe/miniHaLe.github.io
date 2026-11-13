@@ -1,0 +1,1 @@
+import{m as e,t}from"./schemas-COdaY83a.js";function n(n){return e(t,n)}export{n as t};

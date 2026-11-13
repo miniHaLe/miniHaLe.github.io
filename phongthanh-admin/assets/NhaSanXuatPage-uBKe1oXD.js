@@ -1,0 +1,1 @@
+import{t as e}from"./CrudTablePage-CDyKvcTJ.js";import{t}from"./nha-san-xuat.config--RyKVymL.js";import{q as n,t as r}from"./routes-Cp-a66ng.js";var i=n();function a(){return(0,i.jsx)(e,{config:t,routePattern:r.catalogManufacturer})}export{a as default};

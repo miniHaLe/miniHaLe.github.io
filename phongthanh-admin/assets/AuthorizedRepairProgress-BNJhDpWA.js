@@ -1,0 +1,1 @@
+import{n as e}from"./use-phieu-tren-trinh-duyet-BY7vp6Xg.js";import{Xr as t}from"./index-Dw6afhnd.js";import{q as n}from"./routes-Cp-a66ng.js";var r=n();function i({origin:n,canReadDetail:i}){let a=e();return(0,r.jsx)(t,{origin:n,canReadDetail:i,repairLocal:{shown:a.shown,sent:a.importMap!==void 0,unsent:a.phieu.length,deadline:a.cauHinh?.hanNhap??void 0}})}export{i as default};

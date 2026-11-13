@@ -1,0 +1,1 @@
+import{r as e}from"./use-current-user-BZqA8867.js";function t(t){let{data:n}=e();return n?.quyen?.includes(t)??!1}export{t};

@@ -1,0 +1,1 @@
+import{t as e}from"./CrudTablePage-CDyKvcTJ.js";import{t}from"./chi-nhanh.config-DilZyvX1.js";import{q as n,t as r}from"./routes-Cp-a66ng.js";var i=n();function a(){return(0,i.jsx)(e,{config:t,routePattern:r.manageBranches})}export{a as default};

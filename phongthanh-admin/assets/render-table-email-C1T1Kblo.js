@@ -1,0 +1,1 @@
+import{q as e}from"./routes-Cp-a66ng.js";var t=e();function n(e){if(typeof e!=`string`||e.trim()===``)return null;let n=e.indexOf(`@`);return n<=0?e:(0,t.jsxs)(t.Fragment,{children:[(0,t.jsx)(`span`,{className:`whitespace-nowrap`,children:e.slice(0,n)}),(0,t.jsx)(`wbr`,{}),(0,t.jsx)(`span`,{className:`whitespace-nowrap`,children:e.slice(n)})]})}export{n as t};

@@ -1,0 +1,1 @@
+var e={bao_hanh:`Bảo hành`,sua_dich_vu:`Sửa dịch vụ`,bh_sua_chua:`BH sửa chữa`},t={tai_tram:`Tại Trạm`,nha_khach:`Nhà Khách`},n=[`tong-the`,`tem-nhan`,`bao-hanh`,`loi`,`linh-kien-cu`,`linh-kien-moi`,`sau-sua`,`phieu-sua-chua`,`khac`];export{t as n,n as r,e as t};

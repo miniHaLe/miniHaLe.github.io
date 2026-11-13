@@ -1,0 +1,1 @@
+function e(e){let t=Object.prototype.toString.call(e);return e instanceof Date||typeof e==`object`&&t===`[object Date]`?new e.constructor(+e):typeof e==`number`||t===`[object Number]`||typeof e==`string`||t===`[object String]`?new Date(e):new Date(NaN)}function t(e,t){return e instanceof Date?new e.constructor(t):new Date(t)}export{e as n,t};

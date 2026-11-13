@@ -1,0 +1,1 @@
+var e=new WeakMap;function t(t,n,r=0){let i=t.getRowModel().rows,a=e.get(i);return a||(a=new Map(i.map((e,t)=>[e.id,t])),e.set(i,a)),r+(a.get(n.id)??n.index)+1}export{t};

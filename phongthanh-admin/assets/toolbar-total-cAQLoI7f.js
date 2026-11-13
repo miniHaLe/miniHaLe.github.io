@@ -1,0 +1,1 @@
+import{C as e,q as t}from"./routes-Cp-a66ng.js";var n=t();function r({label:t,value:r,className:i}){return(0,n.jsxs)(`div`,{className:e(`rounded-md border border-ops-info bg-ops-info-subtle px-3 py-1.5 text-sm font-medium text-ops-info shadow-inset`,i),children:[t,`: `,(0,n.jsx)(`span`,{className:`tabular-nums`,children:r})]})}export{r as t};

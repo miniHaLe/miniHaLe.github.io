@@ -1,0 +1,1 @@
+var e=[`Trả hàng từ kỹ thuật`,`Trả hàng từ khách hàng`,`Trả hàng cho nhà cung cấp`,`Trả xác linh kiện`];export{e as t};

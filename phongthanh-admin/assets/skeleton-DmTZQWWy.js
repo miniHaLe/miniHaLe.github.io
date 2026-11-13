@@ -1,0 +1,1 @@
+import{C as e,q as t}from"./routes-Cp-a66ng.js";var n=t();function r({className:t,...r}){return(0,n.jsx)(`div`,{className:e(`animate-pulse rounded-sm bg-surface-muted`,t),...r})}export{r as t};

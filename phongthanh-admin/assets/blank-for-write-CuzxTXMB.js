@@ -1,0 +1,1 @@
+function e(e){return e==null||typeof e==`string`&&e.trim()===``}function t(t,n){return e(t)?n===`update`?null:void 0:t}export{t};
